@@ -32,4 +32,13 @@ public class LineSettings {
 		return "LineSettings [lineThickness=" + lineThickness + ", lineLength=" + lineLength + ", lineOffset="
 				+ lineOffset + ", opacity=" + opacity + ", showLines=" + showLines + "]";
 	}
+	public LineSettings copyWithScale(float scale) {
+		var copy = new LineSettings();
+		copy.lineThickness = lineThickness * scale;
+		copy.lineLength = lineLength * scale;
+		copy.lineOffset = lineOffset * scale;
+		copy.opacity = opacity;
+		copy.showLines = showLines;
+		return copy;
+	}
 }

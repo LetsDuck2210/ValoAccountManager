@@ -74,6 +74,7 @@ public class ProfileSettings {
     	)
     );
     
+    public ProfileSettings() {}
     public ProfileSettings(String code) {
     	// code: 0;P;c;1;d;1;...
     	var tokens = code.substring(code.indexOf(";P;") + 3); // -> c;1;d;1;...
@@ -89,9 +90,24 @@ public class ProfileSettings {
     		var settingTable = tables.get(prefix);
     		if(settingTable != null && settingTable.containsKey(settingCode)) {
     			settingTable.get(settingCode).accept(parts[1]);
-    			System.out.println("parsed " + token + " to " + prefix + " " + settingCode + " = " + parts[1]);
     		}
     	}
+    }
+    
+    public ProfileSettings copyWithScale(float scale) {
+    	var copy = new ProfileSettings();
+    	copy.color = color;
+    	copy.useCustomColor = useCustomColor;
+    	copy.outlineThickness = outlineThickness * scale;
+    	copy.outlineColor = outlineColor;
+    	copy.outlineOpacity = outlineOpacity;
+    	copy.centerDotSize = centerDotSize * scale;
+    	copy.centerDotOpacity = centerDotOpacity;
+    	copy.displayCenterDot = displayCenterDot;
+    	copy.hideCrosshair = hideCrosshair;
+    	copy.innerLines = innerLines.copyWithScale(scale);
+    	copy.outerLines = outerLines.copyWithScale(scale);
+    	return copy;
     }
 
 	@Override
