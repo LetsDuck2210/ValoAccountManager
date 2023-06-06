@@ -1,4 +1,4 @@
-package valorant;
+package valorant.crosshair;
 
 import java.awt.Image;
 
