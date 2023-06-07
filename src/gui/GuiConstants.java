@@ -3,6 +3,7 @@ package gui;
 import java.awt.Color;
 import java.awt.Font;
 
+@SuppressWarnings("unused")
 public final class GuiConstants {
 	public final static Font FONT = new Font("Arial", 0, 20);
 	private final static Color DARK_COMPONENTS = new Color(0, 10, 100);
