@@ -11,6 +11,8 @@ import javax.swing.JFrame;
 
 import gui.AccountInfoPanel;
 import gui.AccountListPanel;
+import valorant.Account;
+import valorant.Currency;
 import valorant.crosshair.OfflineConverter;
 
 public class ValoAccountManager extends JFrame {
@@ -31,7 +33,8 @@ public class ValoAccountManager extends JFrame {
 		for(var code : codes)
 			ImageIO.write((RenderedImage) new OfflineConverter(new Dimension(400, 400)).convert(code), "png", new File(i++ + ".png"));
 	}
-
+	
+	private static AccountInfoPanel infoPanel;
 	public ValoAccountManager() {
 		super("ValoAccountManager");
 		
@@ -40,7 +43,9 @@ public class ValoAccountManager extends JFrame {
 		setVisible(true);
 		
 		add(new AccountListPanel());
-		add(new AccountInfoPanel());
+		add(infoPanel = new AccountInfoPanel());
+		
+		infoPanel.display(new Account("kek", "nudel", "krampf", "keks", Currency.OTHER));
 		
 		repaint();
 		revalidate();
