@@ -11,7 +11,7 @@ public class PasswordButton extends InfoButton {
 
 	@Override
 	public void showInformation(Account acc) {
-		value = acc.getPassword();
+		value = acc.password();
 		setText("Password: " + value);
 	}
 	

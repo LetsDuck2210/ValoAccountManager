@@ -12,7 +12,7 @@ public class CurrencyButton extends InfoButton {
 
 	@Override
 	public void showInformation(Account acc) {
-		value = acc.getCurrency().toString();
+		value = acc.currency().toString();
 		setText("Currency: " + value);
 	}
 }

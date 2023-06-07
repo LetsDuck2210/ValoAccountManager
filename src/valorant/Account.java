@@ -10,27 +10,12 @@ import java.net.http.HttpResponse.BodyHandlers;
 
 import util.ImageUtil;
 
-public class Account {
-	private String riotId;
-	private String password;
-	private String name;
-	private String tagline;
-	private String additional;
-	private Currency currency;
-
-	public Account(String riotId, String pw, String name, String tagline, String additional, Currency currency) {
-		this.riotId = riotId;
-		this.password = pw;
-		this.name = name;
-		this.tagline = tagline;
-		this.additional = additional;
-		this.currency = currency;
-	}
-
+// same functionality, no setters
+public record Account(String riotId, String password, String name, String tagline, String additional, Currency currency) {
 	public Account(String riotId, String pw, String name, String tagline, Currency currency) {
 		this(riotId, pw, name, tagline, "", currency);
 	}
-
+	
 	public Image getRankIcon() throws IOException, URISyntaxException, InterruptedException {
 		System.out.println("fetching " + name + "#" + tagline);
 
@@ -50,53 +35,4 @@ public class Account {
 
 		return img;
 	}
-
-	public void setRiotId(String riotId) {
-		this.riotId = riotId;
-	}
-
-	public void setPassword(String pw) {
-		this.password = pw;
-	}
-
-	public void setName(String name) {
-		this.name = name;
-	}
-
-	public void setTagline(String tagline) {
-		this.tagline = tagline;
-	}
-
-	public void setAdditional(String additional) {
-		this.additional = additional;
-	}
-
-	public void setCurrency(Currency currency) {
-		this.currency = currency;
-	}
-
-	public String getRiotId() {
-		return riotId;
-	}
-
-	public String getPassword() {
-		return password;
-	}
-
-	public String getName() {
-		return name;
-	}
-
-	public String getTagline() {
-		return tagline;
-	}
-
-	public String getAdditional() {
-		return additional;
-	}
-
-	public Currency getCurrency() {
-		return currency;
-	}
-
 }

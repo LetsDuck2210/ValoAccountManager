@@ -11,7 +11,7 @@ public class RiotidButton extends InfoButton {
 
 	@Override
 	public void showInformation(Account acc) {
-		value = acc.getRiotId();
+		value = acc.riotId();
 		setText("RiotID: " + value);
 	}
 }

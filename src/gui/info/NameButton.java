@@ -11,7 +11,7 @@ public class NameButton extends InfoButton {
 
 	@Override
 	public void showInformation(Account acc) {
-		value = acc.getName();
+		value = acc.name();
 		setText("Name: " + value);
 	}
 }

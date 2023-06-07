@@ -12,7 +12,7 @@ public class AdditionalButton extends InfoButton {
 
 	@Override
 	public void showInformation(Account acc) {
-		value = acc.getAdditional();
+		value = acc.additional();
 		setText("Additional: " + value);
 	}
 	
