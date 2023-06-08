@@ -100,10 +100,19 @@ public class OfflineConverter implements CrosshairConverter {
 		var cds = settings.centerDotSize + scale * 1.1f;
 		var outt = settings.outlineThickness;
 		
+		g.setColor(withAlpha(settings.color, round(settings.centerDotOpacity * 255)));
+		g.setStroke(new BasicStroke());
+		g.fillRect(
+			round(img.getWidth() / 2f - cds / 2 - 1), // x center
+			round(img.getHeight() / 2f - cds / 2),// y center
+			round(cds + 1),
+			round(cds)
+		);
+
 		if(settings.hasOutline) {
 			g.setColor(withAlpha(Color.black, round(settings.outlineOpacity * 255)));
-			g.setStroke(new BasicStroke(settings.outlineThickness));
-			var cdos = cds + outt + scale / 2;
+			g.setStroke(new BasicStroke(settings.outlineThickness / 2));
+			var cdos = (cds + outt) / 2;
 			g.drawRect(
 				round(img.getWidth() / 2f - cdos / 2), // x center
 				round(img.getHeight() / 2f - cdos / 2),// y center
@@ -111,15 +120,6 @@ public class OfflineConverter implements CrosshairConverter {
 				round(cdos)
 			);
 		}
-		
-		g.setColor(withAlpha(settings.color, round(settings.centerDotOpacity * 255)));
-		g.setStroke(new BasicStroke());
-		g.fillRect(
-			round(img.getWidth() / 2f - cds / 2), // x center
-			round(img.getHeight() / 2f - cds / 2),// y center
-			round(cds),
-			round(cds)
-		);
 	}
 	private void drawRect(Graphics2D g, ProfileSettings settings, float opacity, Rectangle rect) {
 		if(rect.width <= 0 || rect.height <= 0) return;
@@ -128,9 +128,15 @@ public class OfflineConverter implements CrosshairConverter {
 		g.fillRect(rect.x, rect.y, round(rect.width), round(rect.height));
 		
 		if(settings.hasOutline) {
+			var outlineThck = settings.outlineThickness;
 			g.setColor(new Color(0, 0, 0, round(settings.outlineOpacity * 255)));
-			g.setStroke(new BasicStroke(settings.outlineThickness));
-			g.drawRect(rect.x, rect.y, rect.width, rect.height);
+			g.setStroke(new BasicStroke(settings.outlineThickness / 2));
+			g.drawRect(
+				round(rect.x - outlineThck / 4),
+				round(rect.y - outlineThck / 4), 
+				round(rect.width + outlineThck / 2),
+				round(rect.height + outlineThck / 2 - 1)
+			);
 		}
 	}
 	
@@ -149,7 +155,7 @@ public class OfflineConverter implements CrosshairConverter {
 		var length = line.horizLength;
 		int x = switch(dir) {
 				case UP, DOWN -> round(size.width / 2f - thickness / 2); 		// horiz centered
-				case LEFT -> round(size.width / 2f - offset - length);
+				case LEFT -> round(size.width / 2f - offset - length - 1);
 				case RIGHT -> round(size.width / 2f + offset);
 			},
 			y = switch(dir) {
