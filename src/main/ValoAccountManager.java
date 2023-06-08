@@ -8,17 +8,21 @@ import java.io.IOException;
 
 import javax.imageio.ImageIO;
 import javax.swing.JFrame;
+import javax.swing.UIManager;
+import javax.swing.UnsupportedLookAndFeelException;
+import javax.swing.plaf.metal.MetalLookAndFeel;
 
-import gui.AccountInfoPanel;
-import gui.AccountListPanel;
-import valorant.Account;
-import valorant.Currency;
+import gui.GuiConstants;
+import gui.HomeScreen;
+import gui.panels.AccountInfoPanel;
 import valorant.crosshair.OfflineConverter;
 
 public class ValoAccountManager extends JFrame {
 	private static final long serialVersionUID = -1983716182184486275L;
+	private static AccountInfoPanel infoPanel;
 
-	public static void main(String[] args) throws IOException {
+	public static void main(String[] args) throws IOException, UnsupportedLookAndFeelException {
+		UIManager.setLookAndFeel(new MetalLookAndFeel());
 		/* var mainframe = */ new ValoAccountManager();
 		String[] codes = {
 			"0;P;t;2;o;1;d;1;0t;10;0l;19;0v;0;0g;1;0o;1;0a;0;0e;0;1l;10;1v;0;1g;1;1o;19;1a;0;1s;0;1e;0", // glasses
@@ -34,18 +38,15 @@ public class ValoAccountManager extends JFrame {
 			ImageIO.write((RenderedImage) new OfflineConverter(new Dimension(400, 400)).convert(code), "png", new File(i++ + ".png"));
 	}
 	
-	private static AccountInfoPanel infoPanel;
 	public ValoAccountManager() {
 		super("ValoAccountManager");
 		
-		setSize(800, 600);
-		setLayout(new GridLayout(1, 2));
+		setSize(GuiConstants.PREFERED_SIZE);
+		setLayout(new GridLayout(1, 1));
 		setVisible(true);
+		setDefaultCloseOperation(3);
 		
-		add(new AccountListPanel());
-		add(infoPanel = new AccountInfoPanel());
-		
-		infoPanel.display(new Account("kek", "nudel", "krampf", "keks", Currency.OTHER));
+		add(new HomeScreen());
 		
 		repaint();
 		revalidate();

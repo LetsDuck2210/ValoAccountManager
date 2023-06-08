@@ -10,7 +10,6 @@ import java.net.http.HttpResponse.BodyHandlers;
 
 import util.ImageUtil;
 
-// same functionality, no setters
 public record Account(String riotId, String password, String name, String tagline, String additional, Currency currency) {
 	public Account(String riotId, String pw, String name, String tagline, Currency currency) {
 		this(riotId, pw, name, tagline, "", currency);
