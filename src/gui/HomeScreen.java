@@ -2,9 +2,9 @@ package gui;
 
 import java.awt.Color;
 import java.awt.Component;
-import java.awt.Dimension;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
+import java.util.Optional;
 
 import javax.swing.JPanel;
 
@@ -12,7 +12,6 @@ import gui.panels.AccountInfoPanel;
 import gui.panels.AccountListPanel;
 import gui.panels.TaskbarPanel;
 import valorant.Account;
-import valorant.Currency;
 
 public class HomeScreen extends JPanel {
 	private static final long serialVersionUID = -1459499358513683681L;
@@ -24,31 +23,44 @@ public class HomeScreen extends JPanel {
 	private AccountInfoPanel infoPanel = new AccountInfoPanel();
 	private TaskbarPanel taskbarPanel = new TaskbarPanel();
 	
-	private boolean extendedShowing = false;
+//	private boolean extendedShowing = false;
+	private Optional<JPanel> extendedShowing = Optional.empty();
 	
 	public HomeScreen() {
 		defaultLayout = new GridBagLayout();
-		defaultLayout.columnWeights = new double[] {0.1, 0.1};
+		defaultLayout.columnWeights = new double[] {1, 1};
 		defaultLayout.rowWeights = new double[] {1, 0};
 		defaultLayout.rowHeights = new int[2];
-		defaultLayout.rowHeights[1] = 50;
+		defaultLayout.rowHeights[1] = GuiConstants.TASKBAR_HEIGHT;
 		
 		extendedLayout = defaultLayout;
-		extendedLayout.columnWeights = new double[] {0.1, 0.1, 0.1};
+		extendedLayout.columnWeights = new double[] {1, 1, 1};
 		
 		setOpaque(true);
 		setBackground(Color.gray);
 		
 		showDefault();
-		
-		infoPanel.display(new Account("lol", "rofl", "lwwiwiwiwiwiiiwiwimao", "xD", Currency.TRY));
 	}
 	
-	//TODO: method to show/collapse third view panel (Param: panel)
-	public void show(JPanel panel) {
-		extendedShowing = true;
+	public void showAccount(Account acc) {
+		infoPanel.display(acc);
+	}
+	
+	public void toggleExtended(JPanel panel) {
+		if(extendedShowing.isEmpty()) {
+			setSizeWindow(3/2.0);
+			showExtended(panel);
+		} else if(extendedShowing.get() != panel) {
+			showExtended(panel);
+		} else {
+			collapse();
+			setSizeWindow(2/3.0);
+		}
+	}
+	
+	private void showExtended(JPanel panel) {
+		extendedShowing = Optional.of(panel);
 		removeAll();
-		setSizeWindow(3/2.0);
 		setLayout(extendedLayout);
 		
 		c.fill = GridBagConstraints.BOTH;
@@ -68,9 +80,8 @@ public class HomeScreen extends JPanel {
 		repaint();
 	}
 
-	public void collapse() {
-		extendedShowing = false;
-		setSizeWindow(2/3.0);
+	private void collapse() {
+		extendedShowing = Optional.empty();
 		showDefault();
 	}
 	
@@ -91,17 +102,11 @@ public class HomeScreen extends JPanel {
 		repaint();
 	}
 	
-	//FIXME: Doesn't work.
 	private void setSizeWindow(double factor) {
 		Component parent = this;
 		do {
 			parent = parent.getParent();
 		} while(parent.getParent() != null);
 		parent.setSize((int) (parent.getWidth() * factor), parent.getHeight());
-	}
-	
-	
-	public boolean extendedShowing() {
-		return extendedShowing;
 	}
 }
