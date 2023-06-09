@@ -18,7 +18,6 @@ public class RankPanel extends JPanel {
 	private static final long serialVersionUID = -3609953978930608614L;
 
 	public RankPanel(Account acc) {
-//		setLayout(new BoxLayout(this, BoxLayout.X_AXIS));
 		var layout = new GridBagLayout();
 		layout.rowWeights = new double[] {1};
 		layout.columnWeights = new double[] {0, 1};
@@ -29,7 +28,7 @@ public class RankPanel extends JPanel {
 		constr.fill = GridBagConstraints.BOTH;
 		constr.gridx = constr.gridy = 0;
 		constr.gridheight = constr.gridwidth = 1;
-		layout.setConstraints(this, constr);
+		
 		setLayout(layout);
 		var text = new JLabel("Rank: ");
 		text.setFont(GuiConstants.FONT);
@@ -40,7 +39,7 @@ public class RankPanel extends JPanel {
 		setBackground(GuiConstants.COMPONENT_COLOR);
 		setBorder(BorderFactory.createCompoundBorder(new MatteBorder(5, 5, 0, 5, GuiConstants.BACKGROUND_COLOR),
 				new EmptyBorder(5, 5, 0, 5)));
-
+		
 		acc.getRankIcon(i -> {
 			var imageLabel = new JLabel() {
 				private static final long serialVersionUID = -4966967331855478013L;

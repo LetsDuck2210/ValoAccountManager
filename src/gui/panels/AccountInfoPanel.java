@@ -25,5 +25,5 @@ public class AccountInfoPanel extends JPanel {
 			add(display.display(account));
 		add(new RankPanel(account));
 	}
-	
+
 }

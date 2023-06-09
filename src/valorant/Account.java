@@ -48,7 +48,7 @@ public record Account(String riotId, String password, String name, String taglin
 //		return STR."\{riotId.length()}: \{riotId}...";
 	}
 
-	public Account fromString(String string) throws IllegalArgumentException {
+	public static Account fromString(String string) throws IllegalArgumentException {
 		var split = string.split(":");
 		Account acc = null;
 		try {

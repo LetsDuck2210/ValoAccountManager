@@ -45,6 +45,9 @@ public class HomeScreen extends JPanel {
 	public void showAccount(Account acc) {
 		infoPanel.display(acc);
 	}
+	public void addAccountToList(Account acc) {
+		listPanel.addAccount(acc);
+	}
 	
 	public void toggleExtended(JPanel panel) {
 		if(extendedShowing.isEmpty()) {
@@ -108,5 +111,14 @@ public class HomeScreen extends JPanel {
 			parent = parent.getParent();
 		} while(parent.getParent() != null);
 		parent.setSize((int) (parent.getWidth() * factor), parent.getHeight());
+	}
+
+	public void update() {
+		listPanel.revalidate();
+		listPanel.repaint();
+		infoPanel.revalidate();
+		infoPanel.repaint();
+		revalidate();
+		repaint();
 	}
 }

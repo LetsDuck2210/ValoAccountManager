@@ -7,6 +7,8 @@ import javax.swing.JLabel;
 import gui.GuiConstants;
 
 public class Headline extends JLabel {
+	private static final long serialVersionUID = -7380933037918441974L;
+
 	public Headline(String text) {
 		super(text);
 		setForeground(GuiConstants.TEXT_COLOR);

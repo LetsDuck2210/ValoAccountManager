@@ -15,8 +15,8 @@ public class DoubleInputField extends JPanel implements Input {
 		setBackground(GuiConstants.COMPONENT_COLOR);
 		setOpaque(true);
 		
-		var field1 = new InputField(text1);
-		var field2 = new InputField(text2);
+		field1 = new InputField(text1);
+		field2 = new InputField(text2);
 		
 		add(field1);
 		add(field2);
@@ -26,4 +26,16 @@ public class DoubleInputField extends JPanel implements Input {
 	public String get() {
 		return field1.get() + "#" + field2.get();
 	}
+
+	@Override
+	public void clear() {
+		field1.clear();
+		field2.clear();
+	}
+
+	@Override
+	public boolean isFilled() {
+		return field1.isFilled() && field2.isFilled();
+	}
+	
 }
