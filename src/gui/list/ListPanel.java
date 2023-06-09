@@ -1,8 +1,11 @@
 package gui.list;
 
+import java.awt.Color;
 import java.awt.Dimension;
+import java.awt.FlowLayout;
+import java.awt.GridLayout;
 
-import javax.swing.BoxLayout;
+import javax.swing.BorderFactory;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 
@@ -11,29 +14,40 @@ import valorant.Account;
 
 public class ListPanel extends JPanel {
 	private static final long serialVersionUID = -827302597575965602L;
+	private JPanel pane;
+	private FlowLayout paneLayout;
+	private JScrollPane scroll;
 
 	public ListPanel() {
 //		var layout = new FlowLayout(FlowLayout.CENTER);
 //		var layout = new DefaultMenuLayout(this, BoxLayout.Y_AXIS);
-		var layout = new BoxLayout(this, BoxLayout.Y_AXIS);
 		
-		setLayout(layout);
 		setBackground(GuiConstants.BACKGROUND_COLOR);
-//		setBackground(Color.cyan);
+		setBorder(BorderFactory.createLineBorder(Color.RED));
+		setLayout(new GridLayout(1, 1));
 		setOpaque(true);
 		
-		var scroll = new JScrollPane(this);
-		scroll.setSize(this.getSize());
+		pane = new JPanel();
+		paneLayout = new FlowLayout(FlowLayout.LEADING);
+		pane.setLayout(paneLayout);
+		pane.setBackground(GuiConstants.BACKGROUND_COLOR);
+		pane.setOpaque(true);
+		
+		scroll = new JScrollPane(pane);
 		scroll.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
 		scroll.getVerticalScrollBar().setUnitIncrement(16);
 		setAutoscrolls(true);
 		
-//		var hgap = layout.getHgap();
-		var hgap = 10;
-		setPreferredSize(new Dimension(getPreferredSize().width, getComponentCount() * (GuiConstants.LISTBUTTON_HEIGHT + hgap) + hgap));
+		add(scroll);
+		
+		revalidate();
 	}
 	
 	public void addAccount(Account acc) {
-		this.add(new ListButton(acc));
+		pane.add(new ListButton(acc));
+
+		var hgap = paneLayout.getHgap();
+		pane.setPreferredSize(new Dimension(scroll.getWidth(), pane.getComponentCount() * (GuiConstants.LISTBUTTON_HEIGHT + hgap) + hgap));
+		System.out.println(pane.getPreferredSize());
 	}
 }
