@@ -1,29 +1,31 @@
-package gui.panels;
+package gui.info;
 
 import java.awt.GridLayout;
 
 import javax.swing.JPanel;
 
 import gui.GuiConstants;
-import gui.info.InfoDisplay;
-import gui.info.RankPanel;
 import valorant.Account;
 
-public class AccountInfoPanel extends JPanel {
+public class InfoPanel extends JPanel {
 	private static final long serialVersionUID = 4202177239755879659L;
+	private RankPanel rankPanel;
 
-	public AccountInfoPanel() {
+	public InfoPanel() {
 		var layout = new GridLayout(6, 1);
 		setLayout(layout);
 		setBackground(GuiConstants.BACKGROUND_COLOR);
 		setOpaque(true);
+		
+		for(var display : InfoDisplay.values())
+			add(display.getButton());
+		add(rankPanel = new RankPanel());
 	}
 
 	public void display(Account account) {
-		removeAll();
 		for (var display : InfoDisplay.values())
-			add(display.display(account));
-		add(new RankPanel(account));
+			display.display(account);
+		rankPanel.showRank(account);
 	}
 
 }

@@ -51,6 +51,7 @@ public class AddAccountPanel extends JPanel {
 			if(informationFilled()) {
 				ValoAccountManager.addAccount(fromInput());
 				clearInputs();
+				
 			}
 		});
 		submit.setBorder(BorderFactory.createCompoundBorder(

@@ -13,7 +13,7 @@ import javax.swing.UnsupportedLookAndFeelException;
 import javax.swing.plaf.metal.MetalLookAndFeel;
 
 import gui.GuiConstants;
-import gui.HomeScreen;
+import gui.home.HomeScreen;
 import util.FileManager;
 import valorant.Account;
 import valorant.Currency;
@@ -65,7 +65,7 @@ public class ValoAccountManager extends JFrame {
 		fm.writeLine(acc.toString());
 		accounts.add(acc);
 		home.addAccountToList(acc);
-		home.update();
+		home.update();       
 	}
 	
 	public Optional<Account> getCurrentAccount() {

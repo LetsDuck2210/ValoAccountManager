@@ -1,4 +1,4 @@
-package gui.panels;
+package gui.home;
 
 import java.awt.Color;
 import java.awt.FlowLayout;
@@ -6,7 +6,7 @@ import java.awt.FlowLayout;
 import javax.swing.JPanel;
 
 import gui.GuiConstants;
-import gui.components.TaskbarButton;
+import gui.panels.AddAccountPanel;
 
 public class TaskbarPanel extends JPanel {
 	private static final long serialVersionUID = 5118137174535785959L;
@@ -17,7 +17,7 @@ public class TaskbarPanel extends JPanel {
 		setLayout(new FlowLayout(FlowLayout.LEFT));
 		
 		add(new TaskbarButton("add", new AddAccountPanel()));
-		add(new TaskbarButton("edit", new TestPanel(Color.pink)));
-		add(new TaskbarButton("crosshairs", new TestPanel(Color.green)));
+		add(new TaskbarButton("edit", new AddAccountPanel()));
+		add(new TaskbarButton("crosshairs", new AddAccountPanel()));
 	}
 }

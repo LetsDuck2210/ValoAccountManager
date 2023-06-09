@@ -5,19 +5,25 @@ import java.util.function.Function;
 import valorant.Account;
 
 public enum InfoDisplay {
-	RIOTID		(acc -> new InfoButton("ID: ", acc.riotId(), true)),
-	PASSWORD	(acc -> new InfoButton("Password: ", acc.password(), true)),
-	NAME		(acc -> new InfoButton("Name: ", acc.name() + " #" + acc.tagline(),true)),
-	CURRENCY	(acc -> new InfoButton("Currency: ", acc.currency().name(), false)),
-	ADDITIONAL	(acc -> new InfoButton("Notes: ", acc.additional(), false));
+	RIOTID		("ID: ", acc -> acc.riotId(), true),
+	PASSWORD	("Password: ", acc -> acc.password(), true),
+	NAME		("Name: ", acc -> acc.name() + " #" + acc.tagline(),true),
+	CURRENCY	("Currency: ", acc -> acc.currency().name(), false),
+	ADDITIONAL	("Notes: ", acc -> acc.additional(), false);
 	
-	private final Function<Account, InfoButton> display;
+	private final InfoButton infoButton;
+	private final Function<Account, String> display;	
 	
-	private InfoDisplay(Function<Account, InfoButton> display) {
+	private InfoDisplay(String text, Function<Account, String> display, boolean enabled) {
+		this.infoButton = new InfoButton(text, "", enabled);
 		this.display = display;
 	}
 	
-	public InfoButton display(Account acc) {
-		return display.apply(acc);
+	public void display(Account acc) {
+		infoButton.setValue(display.apply(acc));
+	}
+	
+	public InfoButton getButton() {
+		return infoButton;
 	}
 }

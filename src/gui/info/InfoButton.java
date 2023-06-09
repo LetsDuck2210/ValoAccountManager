@@ -11,7 +11,7 @@ import javax.swing.border.MatteBorder;
 
 import gui.GuiConstants;
 
-public class InfoButton extends JButton {
+class InfoButton extends JButton {
 	private static final long serialVersionUID = 6880347885377211418L;
 	protected String text, value;
 
@@ -35,7 +35,12 @@ public class InfoButton extends JButton {
 
 		addActionListener(a -> {
 			var clip = Toolkit.getDefaultToolkit().getSystemClipboard();
-			clip.setContents(new StringSelection(value), null);
+			clip.setContents(new StringSelection(this.value), null);
 		});
+	}
+	
+	public void setValue(String value) {
+		this.value = value;
+		setText(text + value);
 	}
 }

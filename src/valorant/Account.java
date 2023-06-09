@@ -5,17 +5,25 @@ import java.net.URI;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse.BodyHandlers;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.function.Consumer;
 
 import util.ImageUtil;
 
 public record Account(String riotId, String password, String name, String tagline, String additional,
 		Currency currency) {
+	private static Map<Account, Image> rankIcons = new HashMap<>();
+	
 	public Account(String riotId, String pw, String name, String tagline, Currency currency) {
 		this(riotId, pw, name, tagline, "", currency);
 	}
 
 	public void getRankIcon(Consumer<Image> averageAmerican) {
+		if(rankIcons.containsKey(this)) {
+			averageAmerican.accept(rankIcons.get(this));
+			return;
+		}
 		new Thread(() -> {
 			try {
 				System.out.println("fetching " + name + "#" + tagline);
@@ -34,6 +42,8 @@ public record Account(String riotId, String password, String name, String taglin
 					img = ImageUtil.loadFile("assets/rankIcons/empty.png").catchErr(e -> {
 					}).sync();
 				}
+				
+				rankIcons.put(this, img);
 				averageAmerican.accept(img);
 			} catch (Exception e) {
 				e.printStackTrace();

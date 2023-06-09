@@ -25,5 +25,5 @@ public final class GuiConstants {
 	
 	public static final Dimension PREFERED_SIZE = new Dimension(800, 600);
 	public static final int TASKBAR_HEIGHT = 30;
-	public static final int LISTBUTTON_HEIGHT = 75;
+	public static final int LISTBUTTON_HEIGHT = 50;
 }

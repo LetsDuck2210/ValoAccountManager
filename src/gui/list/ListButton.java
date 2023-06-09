@@ -26,8 +26,9 @@ public class ListButton extends JButton {
 		setHorizontalAlignment(SwingConstants.LEFT);
 		setBorder(BorderFactory.createCompoundBorder(new MatteBorder(5, 5, 0, 5, GuiConstants.BACKGROUND_COLOR), 
 				new EmptyBorder(5, 5, 0, 5)));
-		setPreferredSize(new Dimension((int) getPreferredSize().getWidth(), GuiConstants.LISTBUTTON_HEIGHT));
+		setPreferredSize(new Dimension((int) GuiConstants.PREFERED_SIZE.getWidth() / 2 , GuiConstants.LISTBUTTON_HEIGHT));
 		
+		setSize(800, 100);
 		addActionListener(a -> {
 			ValoAccountManager.showAccount(acc);
 		});
