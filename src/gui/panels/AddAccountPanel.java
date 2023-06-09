@@ -32,11 +32,11 @@ public class AddAccountPanel extends JPanel {
 		setOpaque(true);
 
 		add(new Headline("Add Account"));
-		inputs.add(new InputField("ID"));
-		inputs.add(new InputField("Password"));
-		inputs.add(new DoubleInputField("Name", "#"));
+		inputs.add(new InputField("ID: "));
+		inputs.add(new InputField("Password: "));
+		inputs.add(new DoubleInputField("Name: ", "# "));
 		inputs.add(new CurrencySelect());
-		inputs.add(new InputField("Notes"));
+		inputs.add(new InputField("Notes: "));
 
 		for (var input : inputs)
 			add((JComponent) input);
@@ -55,7 +55,7 @@ public class AddAccountPanel extends JPanel {
 			}
 		});
 		submit.setBorder(BorderFactory.createCompoundBorder(
-				new MatteBorder(10, 150, 10, 150, GuiConstants.BACKGROUND_COLOR), new EmptyBorder(5, 5, 0, 5)));
+				new MatteBorder(5, 0, 10, 5, GuiConstants.BACKGROUND_COLOR), new EmptyBorder(5, 0, 10, 5)));
 
 		add(new JComponent() {
 			private static final long serialVersionUID = 1045449690138475005L;

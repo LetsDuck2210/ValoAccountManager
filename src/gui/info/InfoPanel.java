@@ -3,6 +3,7 @@ package gui.info;
 import java.awt.GridLayout;
 
 import javax.swing.JPanel;
+import javax.swing.border.EmptyBorder;
 
 import gui.GuiConstants;
 import valorant.Account;
@@ -14,6 +15,7 @@ public class InfoPanel extends JPanel {
 	public InfoPanel() {
 		var layout = new GridLayout(6, 1);
 		setLayout(layout);
+		setBorder(new EmptyBorder(0, 0, 10, 0));
 		setBackground(GuiConstants.BACKGROUND_COLOR);
 		setOpaque(true);
 		

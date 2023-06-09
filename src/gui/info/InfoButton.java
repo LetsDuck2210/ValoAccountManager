@@ -15,14 +15,14 @@ class InfoButton extends JButton {
 	private static final long serialVersionUID = 6880347885377211418L;
 	protected String text, value;
 
-	public InfoButton(String text, String value, Boolean enabled) {
+	public InfoButton(String text, String value, boolean enabled) {
 		super(text + value);
 
 		this.text = text;
 		this.value = value;
 
 		setEnabled(enabled);
-
+		
 		setFocusPainted(false);
 		setOpaque(true);
 		setFont(GuiConstants.FONT);

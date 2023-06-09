@@ -1,6 +1,5 @@
 package gui.home;
 
-import java.awt.Color;
 import java.awt.FlowLayout;
 
 import javax.swing.JPanel;

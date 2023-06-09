@@ -1,6 +1,5 @@
 package gui.home;
 
-import java.awt.Color;
 import java.awt.Component;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
@@ -40,9 +39,8 @@ public class HomeScreen extends JPanel {
 //		extendedLayout.columnWeights = new double[] {1, 1, 1};
 		
 		var layout = new GridBagLayout();
-		layout.rowWeights = new double[] {1, 0};
-		layout.rowHeights = new int[2];
-		layout.rowHeights[1] = GuiConstants.TASKBAR_HEIGHT;
+		layout.rowWeights = new double[] {60, 1};
+		layout.rowHeights = new int[] {0, GuiConstants.TASKBAR_HEIGHT};
 		layout.columnWeights = new double[] {1, 1};
 		setLayout(layout);
 		
@@ -54,7 +52,7 @@ public class HomeScreen extends JPanel {
 		add(taskbarPanel, c);
 		
 		setOpaque(true);
-		setBackground(Color.gray);
+		setBackground(GuiConstants.BACKGROUND_COLOR);
 		
 		showDefault();
 	}
@@ -82,23 +80,6 @@ public class HomeScreen extends JPanel {
 	
 	private void showExtended(JPanel panel) {
 		extendedShowing = Optional.of(panel);
-//		removeAll();
-		
-//		setLayout(extendedLayout);
-//		
-//		c.fill = GridBagConstraints.BOTH;
-//		c.gridx = 0; c.gridy = 0; c.gridheight = 1; c.gridwidth = 1;
-//		add(listPanel, c);
-//		
-//		c.gridx = 1;
-//		add(infoPanel, c);
-//		
-//		c.gridx = 2;
-//		add(panel, c);
-//		
-//		c.gridx = 0; c.gridy = 1; c.gridwidth = 3;
-//		add(taskbarPanel, c);
-		
 		mainView.showExtended(panel);
 		
 		revalidate();
@@ -111,18 +92,6 @@ public class HomeScreen extends JPanel {
 	}
 	
 	private void showDefault() {
-//		removeAll();
-		
-//		setLayout(defaultLayout);
-//		c.fill = GridBagConstraints.BOTH;
-//		c.gridx = 0; c.gridy = 0; c.gridheight = 1; c.gridwidth = 1;
-//		add(listPanel, c);
-//		
-//		c.gridx = 1;
-//		add(infoPanel, c);
-//		
-//		c.gridy = 1; c.gridx = 0; c.gridwidth = 2;
-//		add(taskbarPanel, c);22
 		mainView.showDefault();
 		
 		revalidate();

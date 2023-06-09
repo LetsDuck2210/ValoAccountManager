@@ -44,7 +44,8 @@ public record Account(String riotId, String password, String name, String taglin
 				}
 				
 				rankIcons.put(this, img);
-				averageAmerican.accept(img);
+				if(averageAmerican != null)
+					averageAmerican.accept(img);
 			} catch (Exception e) {
 				e.printStackTrace();
 			}

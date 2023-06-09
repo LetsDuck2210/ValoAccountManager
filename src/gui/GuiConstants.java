@@ -24,6 +24,8 @@ public final class GuiConstants {
 								TEXT_COLOR = DARK_TEXT;
 	
 	public static final Dimension PREFERED_SIZE = new Dimension(800, 600);
-	public static final int TASKBAR_HEIGHT = 30;
-	public static final int LISTBUTTON_HEIGHT = 50;
+	public static final int TASKBAR_HEIGHT = 30,
+							LISTBUTTON_HEIGHT = 50,
+							DEFAULT_HGAP = 2,
+							DEFAULT_VGAP = 5;
 }

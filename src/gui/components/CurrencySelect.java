@@ -1,11 +1,8 @@
 package gui.components;
 
-import java.util.HashSet;
-
 import javax.swing.BorderFactory;
 import javax.swing.BoxLayout;
 import javax.swing.ButtonGroup;
-import javax.swing.ButtonModel;
 import javax.swing.JPanel;
 import javax.swing.JRadioButton;
 import javax.swing.border.EmptyBorder;
@@ -27,31 +24,22 @@ public class CurrencySelect extends JPanel implements Input {
 		
 		setBorder(BorderFactory.createCompoundBorder(new MatteBorder(5, 5, 0, 5, GuiConstants.BACKGROUND_COLOR), new EmptyBorder(5, 5, 0, 5)));
 		
+		var defaultCurrency = Currency.OTHER;
 		var bg = new ButtonGroup();
-		otherButton = new JRadioButton();
-		tryButton = new JRadioButton();
-		var radioButtons = new HashSet<JRadioButton>();
-		radioButtons.add(tryButton);
-		radioButtons.add(otherButton);
-		otherButton.setSelected(true);
-		
-		tryButton.addActionListener(a -> {
-			select = Currency.TRY;
-			System.out.println("selected: " + Currency.TRY.toString() + ", get(): " + get());
-		});
-		otherButton.addActionListener(a -> select = Currency.OTHER);
-		
-		tryButton.setText("TRY");
-		otherButton.setText("Other");
-		
-		for(var button : radioButtons) {
-			button.setBackground(GuiConstants.COMPONENT_COLOR);
-			button.setForeground(GuiConstants.TEXT_COLOR);
-			button.setFont(GuiConstants.FONT);
-			bg.add(button);
-			add(button);
+		for(var currency : Currency.values()) {
+			var rb = new JRadioButton();
+			rb.setText(currency.name());
+			rb.addActionListener(a -> select = currency);
+			if(currency == defaultCurrency)
+				rb.setSelected(true);
+			
+			bg.add(rb);
+			
+			rb.setBackground(GuiConstants.COMPONENT_COLOR);
+			rb.setForeground(GuiConstants.TEXT_COLOR);
+			rb.setFont(GuiConstants.FONT);
+			add(rb);
 		}
-		
 	}
 
 	@Override

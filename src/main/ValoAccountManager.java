@@ -27,8 +27,9 @@ public class ValoAccountManager extends JFrame {
 
 	public static void main(String[] args) throws IOException, UnsupportedLookAndFeelException {
 		for(var line : fm.readLines()) {
-			accounts.add(Account.fromString(line));
-			System.out.println(line);
+			var acc = Account.fromString(line);
+			accounts.add(acc);
+			acc.getRankIcon(null);
 		}
 		
 		UIManager.setLookAndFeel(new MetalLookAndFeel());
@@ -44,8 +45,8 @@ public class ValoAccountManager extends JFrame {
 		setMinimumSize(new Dimension(600, 500));
 		setLayout(new GridLayout());
 		setBackground(GuiConstants.BACKGROUND_COLOR);
-		setVisible(true);
 		setDefaultCloseOperation(3);
+		setVisible(true);
 		
 		add(home);
 		showAccount(new Account("", "", "", "", "", Currency.OTHER));
@@ -57,7 +58,6 @@ public class ValoAccountManager extends JFrame {
 	public static void showAccount(Account acc) {
 		currentAccount = Optional.of(acc);
 		home.showAccount(acc);
-		
 	}
 
 	public static void addAccount(Account acc) {

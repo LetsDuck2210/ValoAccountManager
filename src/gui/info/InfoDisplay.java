@@ -7,7 +7,7 @@ import valorant.Account;
 public enum InfoDisplay {
 	RIOTID		("ID: ", acc -> acc.riotId(), true),
 	PASSWORD	("Password: ", acc -> acc.password(), true),
-	NAME		("Name: ", acc -> acc.name() + " #" + acc.tagline(),true),
+	NAME		("Name: ", acc -> acc.name() + " #" + acc.tagline(), true),
 	CURRENCY	("Currency: ", acc -> acc.currency().name(), false),
 	ADDITIONAL	("Notes: ", acc -> acc.additional(), false);
 	
