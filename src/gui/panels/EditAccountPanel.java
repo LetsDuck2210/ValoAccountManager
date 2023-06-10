@@ -7,9 +7,9 @@ import valorant.Currency;
 public class EditAccountPanel extends AccountPanel {
 	private static final long serialVersionUID = -3543949683339232381L;
 
-	//TODO: show current Account information
 	public EditAccountPanel() {
-		super("Edit Account");		
+		super("Edit Account");
+
 	}
 
 	@Override

@@ -23,7 +23,7 @@ public class RankPanel extends JPanel {
 		private static final long serialVersionUID = -4966967331855478013L;
 
 		public void paintComponent(Graphics g) {
-			g.drawImage(rankImage, 0, 0, getHeight(), getHeight(), null);
+			g.drawImage(rankImage, 0, 2, getHeight() - 4, getHeight() - 4, null);
 		}
 	};
 

@@ -1,7 +1,9 @@
 package valorant;
 
 import java.awt.Image;
+import java.io.IOException;
 import java.net.URI;
+import java.net.URISyntaxException;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse.BodyHandlers;
@@ -46,8 +48,8 @@ public record Account(String riotId, String password, String name, String taglin
 				rankIcons.put(this, img);
 				if(averageAmerican != null)
 					averageAmerican.accept(img);
-			} catch (Exception e) {
-				e.printStackTrace();
+			} catch (IOException | InterruptedException | URISyntaxException e) {
+				System.out.println("Couldn't fetch rank icon: " + e.getMessage());
 			}
 		}).start();
 	}

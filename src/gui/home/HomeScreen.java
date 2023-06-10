@@ -25,19 +25,9 @@ public class HomeScreen extends JPanel {
 	private TaskbarPanel taskbarPanel = new TaskbarPanel();
 	private HomeScreenView mainView = new HomeScreenView(listPanel, infoPanel);
 	
-//	private boolean extendedShowing = false;
 	private Optional<JPanel> extendedShowing = Optional.empty();
 	
 	public HomeScreen() {
-//		defaultLayout = new GridBagLayout();
-//		defaultLayout.columnWeights = new double[] {1, 1};
-//		defaultLayout.rowWeights = new double[] {1, 0};
-//		defaultLayout.rowHeights = new int[2];
-//		defaultLayout.rowHeights[1] = GuiConstants.TASKBAR_HEIGHT;
-//		
-//		extendedLayout = defaultLayout;
-//		extendedLayout.columnWeights = new double[] {1, 1, 1};
-		
 		var layout = new GridBagLayout();
 		layout.rowWeights = new double[] {1, 0};
 		layout.rowHeights = new int[] {0, GuiConstants.TASKBAR_HEIGHT};
@@ -76,8 +66,8 @@ public class HomeScreen extends JPanel {
 		} else if(extendedShowing.get() != panel) {
 			showExtended(panel);
 		} else {
-			collapse();
 			setSizeWindow(2/3.0);
+			collapse();
 		}
 	}
 	
@@ -106,7 +96,7 @@ public class HomeScreen extends JPanel {
 		do {
 			parent = parent.getParent();
 		} while(parent.getParent() != null);
-		parent.setSize((int) (parent.getWidth() * factor), parent.getHeight());
+		parent.setSize((int) Math.round(parent.getWidth() * factor), parent.getHeight());
 	}
 
 	public void refresh() {
