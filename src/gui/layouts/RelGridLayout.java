@@ -8,8 +8,6 @@ import java.awt.LayoutManager;
 public class RelGridLayout implements LayoutManager {
 	public static final int ALIGN_VERT = 0, ALIGN_HORIZ = 1;
 	
-	private record Cell(int row, int col) {}
-	
 	private Container parent;
 	private double[] rowSizes, colSizes;
 //	private Component[][] comps;
