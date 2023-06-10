@@ -1,5 +1,7 @@
 package gui.components;
 
+import java.util.ArrayList;
+
 import javax.swing.BorderFactory;
 import javax.swing.BoxLayout;
 import javax.swing.ButtonGroup;
@@ -14,8 +16,6 @@ import valorant.Currency;
 public class CurrencySelect extends JPanel implements Input {
 	private static final long serialVersionUID = -4446144214869466429L;
 	private Currency select = Currency.OTHER;
-	private JRadioButton otherButton;
-	private JRadioButton tryButton;
 
 	public CurrencySelect() {
 		setLayout(new BoxLayout(this, BoxLayout.X_AXIS));
@@ -42,15 +42,15 @@ public class CurrencySelect extends JPanel implements Input {
 		}
 	}
 
+	//TODO: iterate over Currency.values()
 	@Override
 	public String get() {
 		return select == Currency.OTHER ? "OTHER" : "TRY";
 	}
 
+	//TODO: radio button has to reset to OTHER
 	@Override
 	public void clear() {
-		otherButton.setSelected(true);
-		tryButton.setSelected(false);
 		select = Currency.OTHER;
 	}
 

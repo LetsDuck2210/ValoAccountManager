@@ -20,5 +20,6 @@ public class TaskbarButton extends JButton {
 			var home = (HomeScreen) getParent().getParent();
 			home.toggleExtended(panel);
 		});
+//		setPreferredSize(new Dimension(100, GuiConstants.TASKBAR_HEIGHT - 10));
 	}
 }

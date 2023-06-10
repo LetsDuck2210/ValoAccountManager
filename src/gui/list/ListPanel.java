@@ -49,6 +49,16 @@ public class ListPanel extends JPanel {
 		pane.add(new ListButton(acc));
 		repaint();
 	}
+
+	public void removeAccount(Account acc) {
+		for(var comp : pane.getComponents()) {
+			var castedComp = (ListButton) comp;
+			if(castedComp.getAccount() == acc) {
+				pane.remove(castedComp);
+			}
+		}
+		repaint();
+	}
 	
 	public void repaint() {
 		super.repaint();

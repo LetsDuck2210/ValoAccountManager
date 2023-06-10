@@ -17,21 +17,18 @@ import gui.components.DoubleInputField;
 import gui.components.Headline;
 import gui.components.Input;
 import gui.components.InputField;
-import main.ValoAccountManager;
-import valorant.Account;
-import valorant.Currency;
 
-public class AddAccountPanel extends JPanel {
+public abstract class AccountPanel extends JPanel {
 	private static final long serialVersionUID = -1081282648038615739L;
-	private List<Input> inputs = new ArrayList<>();
+	List<Input> inputs = new ArrayList<>();
 
-	public AddAccountPanel() {
+	public AccountPanel(String headline) {
 		var layout = new GridLayout(8, 1);
 		setLayout(layout);
 		setBackground(GuiConstants.BACKGROUND_COLOR);
 		setOpaque(true);
 
-		add(new Headline("Add Account"));
+		add(new Headline(headline));
 		inputs.add(new InputField("ID: "));
 		inputs.add(new InputField("Password: "));
 		inputs.add(new DoubleInputField("Name: ", "# "));
@@ -48,14 +45,10 @@ public class AddAccountPanel extends JPanel {
 		submit.setForeground(GuiConstants.TEXT_COLOR);
 		submit.setFont(GuiConstants.FONT);
 		submit.addActionListener(a -> {
-			if (informationFilled()) {
-				ValoAccountManager.addAccount(fromInput());
-				clearInputs();
-
-			}
+			submit();
 		});
-		submit.setBorder(BorderFactory.createCompoundBorder(new MatteBorder(5, 0, 10, 5, GuiConstants.BACKGROUND_COLOR),
-				new EmptyBorder(5, 0, 10, 5)));
+		submit.setBorder(BorderFactory.createCompoundBorder(
+				new MatteBorder(5, 0, 10, 5, GuiConstants.BACKGROUND_COLOR), new EmptyBorder(5, 0, 10, 5)));
 
 		add(new JComponent() {
 			private static final long serialVersionUID = 1045449690138475005L;
@@ -63,28 +56,14 @@ public class AddAccountPanel extends JPanel {
 		add(submit);
 	}
 
-	private Account fromInput() {
-		var accountData = new String[5];
-		for (int i = 0; i < inputs.size(); i++) {
-			accountData[i] = inputs.get(i).get();
-		}
-		var riotId = accountData[0];
-		var password = accountData[1];
-		var fullName = accountData[2].split("#");
-		var name = fullName[0];
-		var tag = fullName[1];
-		var currency = Currency.fromString(accountData[3]);
-		var additional = accountData[4];
-
-		return new Account(riotId, password, name, tag, additional, currency);
-	}
-
-	private void clearInputs() {
+	abstract void submit();
+	
+	void clearInputs() {
 		for (var input : inputs)
 			input.clear();
 	}
 
-	private boolean informationFilled() {
+	boolean informationFilled() {
 		var filled = true;
 		var neccessaryInputs = new ArrayList<Input>();
 		for (int i = 0; i < 3; i++)

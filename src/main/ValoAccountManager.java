@@ -65,10 +65,17 @@ public class ValoAccountManager extends JFrame {
 		fm.writeLine(acc.toString());
 		accounts.add(acc);
 		home.addAccountToList(acc);
-		home.update();       
+		home.refresh();       
+	}
+	public static void removeAccount(Account acc) {
+		System.out.println("Account is being removed: " + acc.name());
+		fm.deleteLine(acc.toString());
+		accounts.remove(acc);
+		home.removeAccountFromList(acc);
+		home.refresh();       
 	}
 	
-	public Optional<Account> getCurrentAccount() {
+	public static Optional<Account> getCurrentAccount() {
 		return currentAccount;
 	}
 }

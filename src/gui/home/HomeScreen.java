@@ -39,9 +39,9 @@ public class HomeScreen extends JPanel {
 //		extendedLayout.columnWeights = new double[] {1, 1, 1};
 		
 		var layout = new GridBagLayout();
-		layout.rowWeights = new double[] {60, 1};
+		layout.rowWeights = new double[] {1, 0};
 		layout.rowHeights = new int[] {0, GuiConstants.TASKBAR_HEIGHT};
-		layout.columnWeights = new double[] {1, 1};
+		layout.columnWeights = new double[] {1};
 		setLayout(layout);
 		
 		c.fill = GridBagConstraints.BOTH;
@@ -64,6 +64,9 @@ public class HomeScreen extends JPanel {
 	}
 	public void addAccountToList(Account acc) {
 		listPanel.addAccount(acc);
+	}
+	public void removeAccountFromList(Account acc) {
+		listPanel.removeAccount(acc);
 	}
 	
 	public void toggleExtended(JPanel panel) {
@@ -106,7 +109,7 @@ public class HomeScreen extends JPanel {
 		parent.setSize((int) (parent.getWidth() * factor), parent.getHeight());
 	}
 
-	public void update() {
+	public void refresh() {
 		listPanel.revalidate();
 		listPanel.repaint();
 		infoPanel.revalidate();
@@ -114,4 +117,6 @@ public class HomeScreen extends JPanel {
 		revalidate();
 		repaint();
 	}
+
+
 }

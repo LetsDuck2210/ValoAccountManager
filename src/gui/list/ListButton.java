@@ -14,9 +14,11 @@ import valorant.Account;
 
 public class ListButton extends JButton {
 	private static final long serialVersionUID = 4314041358971090768L;
+	private final Account acc;
 
 	public ListButton(Account acc) {
 		super();
+		this.acc = acc;
 		setOpaque(true);
 		setFocusPainted(false);
 		setBackground(GuiConstants.COMPONENT_COLOR);
@@ -31,5 +33,9 @@ public class ListButton extends JButton {
 		addActionListener(a -> {
 			ValoAccountManager.showAccount(acc);
 		});
+	}
+
+	public Account getAccount() {
+		return acc;
 	}
 }
