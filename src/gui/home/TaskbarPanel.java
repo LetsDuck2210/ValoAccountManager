@@ -1,14 +1,11 @@
 package gui.home;
 
 import java.awt.GridLayout;
-import java.util.Set;
 
 import javax.swing.JPanel;
 
 import gui.GuiConstants;
 import gui.components.EmptyComponent;
-import gui.panels.Updatable;
-import main.ValoAccountManager;
 
 public class TaskbarPanel extends JPanel implements Extendable {
 	private static final long serialVersionUID = 5118137174535785959L;
