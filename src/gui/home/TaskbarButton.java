@@ -17,9 +17,9 @@ public class TaskbarButton extends JButton {
 		setBackground(GuiConstants.COMPONENT_COLOR);
 		setForeground(GuiConstants.TEXT_COLOR);
 		addActionListener(a -> {
-			var home = (HomeScreen) getParent().getParent();
+//			var home = (HomeScreen) getParent().getParent();
+			var home = (HomeScreen) getParent().getParent().getParent();
 			home.toggleExtended(panel);
 		});
-//		setPreferredSize(new Dimension(100, GuiConstants.TASKBAR_HEIGHT - 10));
 	}
 }

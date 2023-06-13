@@ -85,7 +85,7 @@ public record Account(String riotId, String password, String name, String taglin
 
 			if (riotIdLength == 0 || passwordLength == 0 || nameLength == 0 || tagLength == 0)
 				throw new IllegalArgumentException("wrong string format: values can't be empty");
-			if (nameLength > 16 || tagLength > 5)
+			if (nameLength > ValoConstants.MAX_NAME_LENGTH || tagLength > ValoConstants.MAX_TAG_LENGTH)
 				throw new IllegalArgumentException("name or tagline too long");
 
 			acc = new Account(riotId, password, name, tag, additional, currency);

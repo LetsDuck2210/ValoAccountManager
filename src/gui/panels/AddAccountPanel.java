@@ -94,7 +94,7 @@ public class AddAccountPanel extends JPanel {
 				filled = false;
 
 		var fullName = neccessaryInputs.get(2).get();
-		if(fullName.split("#").length != 2)
+		if (fullName.split("#").length != 2)
 			return false;
 		var name = fullName.split("#")[0];
 		var tag = fullName.split("#")[1];

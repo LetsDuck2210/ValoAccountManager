@@ -22,12 +22,12 @@ class InfoButton extends JButton {
 		this.value = value;
 
 		setEnabled(enabled);
-		
+
 		setFocusPainted(false);
 		setOpaque(true);
 		setFont(GuiConstants.FONT);
 		setHorizontalAlignment(SwingConstants.LEFT);
-		setBorder(BorderFactory.createCompoundBorder(new MatteBorder(5, 5, 0, 5, GuiConstants.BACKGROUND_COLOR), 
+		setBorder(BorderFactory.createCompoundBorder(new MatteBorder(5, 5, 0, 5, GuiConstants.BACKGROUND_COLOR),
 				new EmptyBorder(5, 5, 0, 5)));
 
 		setBackground(GuiConstants.COMPONENT_COLOR);
@@ -38,7 +38,7 @@ class InfoButton extends JButton {
 			clip.setContents(new StringSelection(this.value), null);
 		});
 	}
-	
+
 	public void setValue(String value) {
 		this.value = value;
 		setText(text + value);

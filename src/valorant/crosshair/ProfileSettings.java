@@ -35,6 +35,9 @@ public class ProfileSettings {
 	};
     
     private Color hexToColor(String hex) {
+    	if(hex.length() < 6) {
+    		throw new StringIndexOutOfBoundsException("out of bounds for " + hex);
+    	}
     	var r = parseInt(hex.substring(0, 2), 16);
     	var g = parseInt(hex.substring(2, 4), 16);
     	var b = parseInt(hex.substring(4, 6), 16);
@@ -95,7 +98,7 @@ public class ProfileSettings {
     		endCur = run ? classMatcher.end() : code.length();
 
     		
-	    	var tokenMatcher = Pattern.compile("\\d?\\w;(\\d+(\\.\\d+)?|[0-9A-Fa-f]{8});?").matcher(tokens);
+	    	var tokenMatcher = Pattern.compile("\\d?\\w;([0-9A-Fa-f]{8}|\\d+(\\.\\d+)?);?").matcher(tokens);
 	    	while(tokenMatcher.find()) {
 	    		var token = tokens.substring(tokenMatcher.start(), tokenMatcher.end());
 	    		var parts = token.split(";");

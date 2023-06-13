@@ -18,8 +18,8 @@ public class InfoPanel extends JPanel {
 		setBorder(new EmptyBorder(0, 0, 10, 0));
 		setBackground(GuiConstants.BACKGROUND_COLOR);
 		setOpaque(true);
-		
-		for(var display : InfoDisplay.values())
+
+		for (var display : InfoDisplay.values())
 			add(display.getButton());
 		add(rankPanel = new RankPanel());
 	}

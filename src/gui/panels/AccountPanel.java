@@ -14,9 +14,11 @@ import javax.swing.border.MatteBorder;
 import gui.GuiConstants;
 import gui.components.CurrencySelect;
 import gui.components.DoubleInputField;
+import gui.components.EmptyComponent;
 import gui.components.Headline;
 import gui.components.Input;
 import gui.components.InputField;
+import valorant.ValoConstants;
 
 public abstract class AccountPanel extends JPanel {
 	private static final long serialVersionUID = -1081282648038615739L;
@@ -50,9 +52,7 @@ public abstract class AccountPanel extends JPanel {
 		submit.setBorder(BorderFactory.createCompoundBorder(
 				new MatteBorder(5, 0, 10, 5, GuiConstants.BACKGROUND_COLOR), new EmptyBorder(5, 0, 10, 5)));
 
-		add(new JComponent() {
-			private static final long serialVersionUID = 1045449690138475005L;
-		});
+		add(new EmptyComponent());
 		add(submit);
 	}
 
@@ -75,7 +75,7 @@ public abstract class AccountPanel extends JPanel {
 		var fullName = neccessaryInputs.get(2).get();
 		var name = fullName.split("#")[0];
 		var tag = fullName.split("#")[1];
-		if (name.length() > 16 || tag.length() > 5)
+		if (name.length() > ValoConstants.MAX_NAME_LENGTH || tag.length() > ValoConstants.MAX_TAG_LENGTH)
 			filled = false;
 
 		return filled;

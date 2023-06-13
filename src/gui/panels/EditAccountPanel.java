@@ -4,7 +4,7 @@ import main.ValoAccountManager;
 import valorant.Account;
 import valorant.Currency;
 
-public class EditAccountPanel extends AccountPanel {
+public class EditAccountPanel extends AccountPanel implements Updatable {
 	private static final long serialVersionUID = -3543949683339232381L;
 
 	public EditAccountPanel() {
@@ -37,6 +37,17 @@ public class EditAccountPanel extends AccountPanel {
 		
 		ValoAccountManager.removeAccount(acc);
 		ValoAccountManager.addAccount(new Account(riotId, password, name, tag, additional, currency));
+	}
+
+	@Override
+	public void update(Account acc) {
+		this.inputs.get(0).set(acc.riotId());
+		this.inputs.get(1).set(acc.password());
+		this.inputs.get(2).set(acc.name() + "#" + acc.tagline());
+		this.inputs.get(3).set(acc.currency().toString());
+		this.inputs.get(4).set(acc.additional());
+		revalidate();
+		repaint();
 	}
 
 }

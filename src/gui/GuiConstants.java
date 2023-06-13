@@ -12,6 +12,7 @@ public final class GuiConstants {
 								DARK_BACKGROUND = Color.DARK_GRAY,
 								DARK_BACKGROUND_ALT = new Color(0x1f1f1f),
 								DARK_TEXT = Color.white,
+								DARK_TEXT_WARNING = Color.red,
 
 								LIGHT_COMPONENTS = new Color(125, 140, 255),
 								LIGHT_BACKGROUND = Color.white,
@@ -21,9 +22,11 @@ public final class GuiConstants {
 								COMPONENT_COLOR_ALT = DARK_COMPONENTS_ALT,
 								BACKGROUND_COLOR = DARK_BACKGROUND,
 								BACKGROUND_COLOR_ALT = DARK_BACKGROUND_ALT,
-								TEXT_COLOR = DARK_TEXT;
+								TEXT_COLOR = DARK_TEXT,
+								TEXT_COLOR_WARNING = DARK_TEXT_WARNING;
 	
-	public static final Dimension PREFERED_SIZE = new Dimension(800, 600);
+	public static final Dimension PREFERED_SIZE = new Dimension(800, 600),
+								  CROSSHAIR_SIZE = new Dimension(125, 125);
 	public static final int TASKBAR_HEIGHT = 30,
 							LISTBUTTON_HEIGHT = 50,
 							DEFAULT_HGAP = 2,
