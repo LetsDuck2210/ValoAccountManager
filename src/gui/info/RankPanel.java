@@ -13,6 +13,7 @@ import javax.swing.border.EmptyBorder;
 import javax.swing.border.MatteBorder;
 
 import gui.GuiConstants;
+import util.ImageUtil;
 import valorant.Account;
 
 public class RankPanel extends JPanel {
@@ -55,6 +56,11 @@ public class RankPanel extends JPanel {
 	}
 	
 	public void showRank(Account acc) {
+		try {
+			rankImage = ImageUtil.loadFile("assets/rankIcons/empty.png").catchErr(e -> {}).sync();
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		}
 		long current = ++id;
 		acc.getRankIcon(i -> {
 			if(current != id)

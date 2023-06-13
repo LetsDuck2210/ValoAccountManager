@@ -8,7 +8,9 @@ import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse.BodyHandlers;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
+import java.util.Set;
 import java.util.function.Consumer;
 
 import util.ImageUtil;
@@ -16,6 +18,7 @@ import util.ImageUtil;
 public record Account(String riotId, String password, String name, String tagline, String additional,
 		Currency currency) {
 	private static Map<Account, Image> rankIcons = new HashMap<>();
+	private static Map<Account, Set<Consumer<Image>>> fetching = new HashMap<>();
 	
 	public Account(String riotId, String pw, String name, String tagline, Currency currency) {
 		this(riotId, pw, name, tagline, "", currency);
@@ -26,6 +29,11 @@ public record Account(String riotId, String password, String name, String taglin
 			averageAmerican.accept(rankIcons.get(this));
 			return;
 		}
+		if(fetching.containsKey(this)) {
+			fetching.get(this).add(averageAmerican);
+			return;
+		}
+		fetching.put(this, new HashSet<>(Set.of(averageAmerican)));
 		new Thread(() -> {
 			try {
 				System.out.println("fetching " + name + "#" + tagline);
@@ -37,6 +45,8 @@ public record Account(String riotId, String password, String name, String taglin
 				var client = HttpClient.newHttpClient();
 				var resp = client.send(req, BodyHandlers.ofString());
 				var rank = resp.body().split(" - ")[0].trim().replaceAll(" ", "_");
+				if(rank.contains("<title>Error</title>"))
+					return;
 				var img = ImageUtil.loadFile("assets/rankIcons/" + rank + ".png").catchErr(e -> {
 				}).sync();
 				System.out.println(name + " fetched!");
@@ -50,6 +60,8 @@ public record Account(String riotId, String password, String name, String taglin
 					averageAmerican.accept(img);
 			} catch (IOException | InterruptedException | URISyntaxException e) {
 				System.out.println("Couldn't fetch rank icon: " + e.getMessage());
+			} finally {
+				fetching.remove(this);
 			}
 		}).start();
 	}
