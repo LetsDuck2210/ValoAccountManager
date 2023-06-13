@@ -19,6 +19,7 @@ public class RankPanel extends JPanel {
 	private static final long serialVersionUID = -3609953978930608614L;
 	private GridBagConstraints constr;
 	private Image rankImage;
+	private long id = 0;
 	private JLabel imageLabel = new JLabel() {
 		private static final long serialVersionUID = -4966967331855478013L;
 
@@ -53,9 +54,11 @@ public class RankPanel extends JPanel {
 				new EmptyBorder(5, 5, 0, 5)));
 	}
 	
-	//FIXME
 	public void showRank(Account acc) {
+		long current = ++id;
 		acc.getRankIcon(i -> {
+			if(current != id)
+				return;
 			rankImage = i;
 			repaint();
 			revalidate();

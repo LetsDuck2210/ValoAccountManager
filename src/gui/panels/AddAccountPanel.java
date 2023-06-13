@@ -35,7 +35,9 @@ public class AddAccountPanel extends AccountPanel {
 		var currency = Currency.fromString(accountData[3]);
 		var additional = accountData[4];
 
-		return new Account(riotId, password, name, tag, additional, currency);
+		var acc = new Account(riotId, password, name, tag, additional, currency);
+		acc.getRankIcon(null);
+		return acc;
 	}
 
 	void clearInputs() {
