@@ -12,13 +12,14 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 import java.util.function.Consumer;
+import java.util.Optional;
 
 import util.ImageUtil;
 
 public record Account(String riotId, String password, String name, String tagline, String additional,
 		Currency currency) {
 	private static Map<Account, Image> rankIcons = new HashMap<>();
-	private static Map<Account, Set<Consumer<Image>>> fetching = new HashMap<>();
+	private static Map<Account, Set<Optional<Consumer<Image>>>> fetching = new HashMap<>();
 	
 	public Account(String riotId, String pw, String name, String tagline, Currency currency) {
 		this(riotId, pw, name, tagline, "", currency);
@@ -30,10 +31,10 @@ public record Account(String riotId, String password, String name, String taglin
 			return;
 		}
 		if(fetching.containsKey(this)) {
-			fetching.get(this).add(averageAmerican);
+			fetching.get(this).add(Optional.of(averageAmerican));
 			return;
 		}
-		fetching.put(this, new HashSet<>(Set.of(averageAmerican)));
+		fetching.put(this, new HashSet<>(Set.of(Optional.ofNullable(averageAmerican))));
 		new Thread(() -> {
 			try {
 				System.out.println("fetching " + name + "#" + tagline);
@@ -56,8 +57,10 @@ public record Account(String riotId, String password, String name, String taglin
 				}
 				
 				rankIcons.put(this, img);
-				if(averageAmerican != null)
-					averageAmerican.accept(img);
+				for(var recv : fetching.get(this)) {
+					if(recv.isPresent())
+						recv.get().accept(img);
+				}
 			} catch (IOException | InterruptedException | URISyntaxException e) {
 				System.out.println("Couldn't fetch rank icon: " + e.getMessage());
 			} finally {

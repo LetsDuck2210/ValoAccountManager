@@ -34,6 +34,8 @@ public class ValoAccountManager extends JFrame {
 	private static HomeScreen home = new HomeScreen();
 
 	public static void main(String[] args) throws IOException, UnsupportedLookAndFeelException {
+		accountFileManager.ensureExists();
+		crosshairFileManager.ensureExists();
 		for (var line : accountFileManager.readLines()) {
 			var acc = Account.fromString(line);
 			accounts.add(acc);
