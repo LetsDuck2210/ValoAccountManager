@@ -38,9 +38,9 @@ public record Account(String riotId, String password, String name, String taglin
 		new Thread(() -> {
 			try {
 				System.out.println("fetching " + name + "#" + tagline);
-
+				var nameR = name.replace(' ', '_');
 				var req = HttpRequest.newBuilder()
-						.uri(new URI("https://api.kyroskoh.xyz/valorant/v1/mmr/eu/" + name + "/" + tagline)).GET()
+						.uri(new URI("https://api.kyroskoh.xyz/valorant/v1/mmr/eu/" + nameR + "/" + tagline)).GET()
 						.build();
 
 				var client = HttpClient.newHttpClient();
@@ -50,7 +50,7 @@ public record Account(String riotId, String password, String name, String taglin
 					return;
 				var img = ImageUtil.loadFile("assets/rankIcons/" + rank + ".png").catchErr(e -> {
 				}).sync();
-				System.out.println(name + " fetched!");
+				System.out.println(nameR + " fetched!");
 				if (img == null) {
 					img = ImageUtil.loadFile("assets/rankIcons/empty.png").catchErr(e -> {
 					}).sync();
