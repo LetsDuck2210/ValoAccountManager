@@ -36,7 +36,7 @@ public class AddAccountPanel extends AccountPanel {
 		var additional = accountData[4];
 
 		var acc = new Account(riotId, password, name, tag, additional, currency);
-		acc.getRankIcon(null);
+		acc.getRank(null);
 		return acc;
 	}
 

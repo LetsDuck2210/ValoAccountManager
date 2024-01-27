@@ -20,6 +20,7 @@ public class RankPanel extends JPanel {
 	private static final long serialVersionUID = -3609953978930608614L;
 	private GridBagConstraints constr;
 	private Image rankImage;
+	private JLabel text;
 	private long id = 0;
 	private JLabel imageLabel = new JLabel() {
 		private static final long serialVersionUID = -4966967331855478013L;
@@ -42,7 +43,7 @@ public class RankPanel extends JPanel {
 		constr.gridheight = constr.gridwidth = 1;
 		
 		setLayout(layout);
-		var text = new JLabel("Rank: ");
+		text = new JLabel("Rank: ");
 		text.setFont(GuiConstants.FONT);
 		text.setForeground(Color.GRAY);
 		add(text, constr);
@@ -62,10 +63,12 @@ public class RankPanel extends JPanel {
 			e.printStackTrace();
 		}
 		long current = ++id;
-		acc.getRankIcon(i -> {
+		acc.getRank(i -> {
 			if(current != id)
 				return;
 			rankImage = i;
+			var rr = Account.rr.get(acc);
+			text.setText("Rank: " + rr + "/100 ");
 			repaint();
 			revalidate();
 		});

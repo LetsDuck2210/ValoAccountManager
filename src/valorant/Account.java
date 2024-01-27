@@ -19,13 +19,15 @@ import util.ImageUtil;
 public record Account(String riotId, String password, String name, String tagline, String additional,
 		Currency currency) {
 	private static Map<Account, Image> rankIcons = new HashMap<>();
+	public static Map<Account, Integer> rr = new HashMap<>();
 	private static Map<Account, Set<Optional<Consumer<Image>>>> fetching = new HashMap<>();
 	
 	public Account(String riotId, String pw, String name, String tagline, Currency currency) {
 		this(riotId, pw, name, tagline, "", currency);
 	}
 
-	public void getRankIcon(Consumer<Image> averageAmerican) {
+	public void getRank(Consumer<Image> averageAmerican) {
+		//we don't check for RR, because when rankIcon is fetched the RR should always be fetched too
 		if(rankIcons.containsKey(this)) {
 			averageAmerican.accept(rankIcons.get(this));
 			return;
@@ -38,13 +40,22 @@ public record Account(String riotId, String password, String name, String taglin
 		new Thread(() -> {
 			try {
 				System.out.println("fetching " + name + "#" + tagline);
-				var nameR = name.replace(' ', '_');
-				var req = HttpRequest.newBuilder()
-						.uri(new URI("https://api.henrikdev.xyz/valorant/v1/mmr/eu/" + nameR + "/" + tagline)).GET()
-						.build();
+				var resp = fetchAccountInfo(name, tagline);
 
-				var client = HttpClient.newHttpClient();
-				var resp = client.send(req, BodyHandlers.ofString()).body();
+				var fromStrRR = "\"ranking_in_tier\":";
+				var fromIndRR = resp.indexOf(fromStrRR) + fromStrRR.length();
+				var rrStr = resp.substring(
+						fromIndRR,
+						resp.indexOf('"', fromIndRR + 1) - 1
+				);
+				int rr;
+				try {
+					rr = Integer.parseInt(rrStr);
+				} catch (NumberFormatException e) {
+					System.out.println("couldn't fetch RR: " + e.getMessage());
+					rr = -1;
+				}
+
 				var fromStr = "\"currenttierpatched\":\"";
 				var fromInd = resp.indexOf(fromStr) + fromStr.length();
 				var rank = resp.substring(
@@ -54,12 +65,13 @@ public record Account(String riotId, String password, String name, String taglin
 				var img = ImageUtil.loadFile("assets/rankIcons/" + rank.replaceAll("\s", "_") + ".png")
 							.catchErr(e -> {})
 							.sync();
-				System.out.println(nameR + " fetched!");
+				System.out.println(name + "#" + tagline + " fetched!");
 				if(img == null)
 					img = ImageUtil.loadFile("assets/rankIcons/empty.png")
 							.catchErr(e -> {})
 							.sync();
-				
+
+				this.rr.put(this, rr);
 				rankIcons.put(this, img);
 				for(var recv : fetching.get(this)) {
 					if(recv.isPresent())
@@ -71,6 +83,16 @@ public record Account(String riotId, String password, String name, String taglin
 				fetching.remove(this);
 			}
 		}).start();
+	}
+
+	private String fetchAccountInfo(String name, String tagline) throws URISyntaxException, IOException, InterruptedException {
+		var nameR = name.replace(' ', '_');
+		var req = HttpRequest.newBuilder()
+				.uri(new URI("https://api.henrikdev.xyz/valorant/v1/mmr/eu/" + nameR + "/" + tagline)).GET()
+				.build();
+
+		var client = HttpClient.newHttpClient();
+		return client.send(req, BodyHandlers.ofString()).body();
 	}
 
 	@Override

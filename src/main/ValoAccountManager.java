@@ -39,7 +39,7 @@ public class ValoAccountManager extends JFrame {
 		for (var line : accountFileManager.readLines()) {
 			var acc = Account.fromString(line);
 			accounts.add(acc);
-			acc.getRankIcon(null);
+			acc.getRank(null);
 		}
 		crosshairFileManager.readLines().forEach(l -> crosshairs.add(l));
 
