@@ -68,7 +68,7 @@ public class RankPanel extends JPanel {
 				return;
 			rankImage = i;
 			var rr = Account.rr.get(acc);
-			text.setText("Rank: " + rr + "/100 ");
+			text.setText("Rank: " + (rr == null ? -1 : rr) + "/100 ");
 			repaint();
 			revalidate();
 		});
