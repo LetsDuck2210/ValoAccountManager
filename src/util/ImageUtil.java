@@ -111,6 +111,7 @@ public class ImageUtil {
 		return new ImageUtil(file);
 	}
 
+	@SuppressWarnings("deprecation")
 	public static ImageUtil loadURL(String url) throws MalformedURLException {
 		return loadURL(new URL(url));
 	}

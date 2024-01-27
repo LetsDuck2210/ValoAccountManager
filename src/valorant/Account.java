@@ -40,21 +40,25 @@ public record Account(String riotId, String password, String name, String taglin
 				System.out.println("fetching " + name + "#" + tagline);
 				var nameR = name.replace(' ', '_');
 				var req = HttpRequest.newBuilder()
-						.uri(new URI("https://api.kyroskoh.xyz/valorant/v1/mmr/eu/" + nameR + "/" + tagline)).GET()
+						.uri(new URI("https://api.henrikdev.xyz/valorant/v1/mmr/eu/" + nameR + "/" + tagline)).GET()
 						.build();
 
 				var client = HttpClient.newHttpClient();
-				var resp = client.send(req, BodyHandlers.ofString());
-				var rank = resp.body().split(" - ")[0].trim().replaceAll(" ", "_");
-				if(rank.contains("<title>Error</title>"))
-					return;
-				var img = ImageUtil.loadFile("assets/rankIcons/" + rank + ".png").catchErr(e -> {
-				}).sync();
+				var resp = client.send(req, BodyHandlers.ofString()).body();
+				var fromStr = "\"currenttierpatched\":\"";
+				var fromInd = resp.indexOf(fromStr) + fromStr.length();
+				var rank = resp.substring(
+					fromInd,
+					resp.indexOf('"', fromInd + 1)
+				);
+				var img = ImageUtil.loadFile("assets/rankIcons/" + rank.replaceAll("\s", "_") + ".png")
+							.catchErr(e -> {})
+							.sync();
 				System.out.println(nameR + " fetched!");
-				if (img == null) {
-					img = ImageUtil.loadFile("assets/rankIcons/empty.png").catchErr(e -> {
-					}).sync();
-				}
+				if(img == null)
+					img = ImageUtil.loadFile("assets/rankIcons/empty.png")
+							.catchErr(e -> {})
+							.sync();
 				
 				rankIcons.put(this, img);
 				for(var recv : fetching.get(this)) {
