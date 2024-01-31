@@ -1,20 +1,19 @@
 package gui.info;
 
-import java.awt.Color;
-import java.awt.Graphics;
-import java.awt.GridBagConstraints;
-import java.awt.GridBagLayout;
-import java.awt.Image;
+import java.awt.*;
+import java.io.IOException;
+import java.net.MalformedURLException;
+import java.net.URISyntaxException;
+import java.net.URL;
 
-import javax.swing.BorderFactory;
-import javax.swing.JLabel;
-import javax.swing.JPanel;
+import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 import javax.swing.border.MatteBorder;
 
 import gui.GuiConstants;
 import util.ImageUtil;
 import valorant.Account;
+import valorant.EmptyAccount;
 
 public class RankPanel extends JPanel {
 	private static final long serialVersionUID = -3609953978930608614L;
@@ -29,6 +28,8 @@ public class RankPanel extends JPanel {
 			g.drawImage(rankImage, 0, 2, getHeight() - 4, getHeight() - 4, null);
 		}
 	};
+	private JButton trackerLinkButton = new JButton();
+	private String url = "https://tracker.gg/valorant";
 
 	public RankPanel() {
 		var layout = new GridBagLayout();
@@ -51,12 +52,32 @@ public class RankPanel extends JPanel {
 		constr.gridx = 1;
 		add(imageLabel, constr);
 
+		trackerLinkButton.setFont(GuiConstants.FONT);
+		trackerLinkButton.setForeground(Color.GRAY);
+		trackerLinkButton.setBackground(GuiConstants.COMPONENT_COLOR_ALT);
+		trackerLinkButton.setText("   Stats   ");
+		trackerLinkButton.setFocusPainted(false);
+		trackerLinkButton.setOpaque(true);
+		trackerLinkButton.setBorder(BorderFactory.createCompoundBorder(new MatteBorder(0, 0, 5, 0, GuiConstants.COMPONENT_COLOR),
+				new EmptyBorder(0, 0, 5, 0)));
+		trackerLinkButton.addActionListener(a -> {
+			try {
+				openWebpage(url);
+			} catch(Exception e) {
+				e.printStackTrace();
+			}
+		});
+		constr.gridx = 2;
+		add(trackerLinkButton, constr);
+
 		setBackground(GuiConstants.COMPONENT_COLOR);
 		setBorder(BorderFactory.createCompoundBorder(new MatteBorder(5, 5, 0, 5, GuiConstants.BACKGROUND_COLOR),
 				new EmptyBorder(5, 5, 0, 5)));
 	}
-	
+
 	public void showRank(Account acc) {
+		if(acc != EmptyAccount.get())
+			url = "https://tracker.gg/valorant/profile/riot/" + acc.name().toLowerCase().replace(' ', '_') + "%23" + acc.tagline().toLowerCase().replace(' ', '_') + "/overview";
 		try {
 			rankImage = ImageUtil.loadFile("assets/rankIcons/empty.png").catchErr(e -> {}).sync();
 		} catch (InterruptedException e) {
@@ -72,5 +93,9 @@ public class RankPanel extends JPanel {
 			repaint();
 			revalidate();
 		});
+	}
+
+	private static void openWebpage(String url) throws MalformedURLException, URISyntaxException, IOException {
+		Desktop.getDesktop().browse(new URL(url).toURI());
 	}
 }
