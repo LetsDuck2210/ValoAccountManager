@@ -3,11 +3,7 @@ package main;
 import java.awt.Dimension;
 import java.awt.GridLayout;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Optional;
-import java.util.Set;
+import java.util.*;
 
 import javax.swing.JFrame;
 import javax.swing.UIManager;
@@ -33,23 +29,31 @@ public class ValoAccountManager extends JFrame {
 	private static Set<Updatable> updatablePanels = new HashSet<>();
 	private static HomeScreen home = new HomeScreen();
 
+
+	//TODO
+	/** configs */
+	private static FileManager configFileManager = new FileManager("config.txt");
+	private static boolean reversed = false; //list is sorted as chosen but reversed
+
 	public static void main(String[] args) throws IOException, UnsupportedLookAndFeelException {
 		accountFileManager.ensureExists();
 		crosshairFileManager.ensureExists();
+		configFileManager.ensureExists();
 		for (var line : accountFileManager.readLines()) {
 			var acc = Account.fromString(line);
 			accounts.add(acc);
 			acc.getRank(null);
 		}
-		crosshairFileManager.readLines().forEach(l -> crosshairs.add(l));
+        crosshairs.addAll(crosshairFileManager.readLines());
 
 		UIManager.setLookAndFeel(new MetalLookAndFeel());
 		new ValoAccountManager();
 
+		//TODO
+		//configFileManager.readLines().forEach(ValoAccountManager::readConfig);
+
 		accounts.forEach(home::addAccountToList);
-		
 		crosshairs.forEach(home::addCrosshairToList);
-		
 	}
 
 	public ValoAccountManager() {
@@ -123,5 +127,66 @@ public class ValoAccountManager extends JFrame {
 
 	public static void addUpdateablePanel(Updatable panel) {
 		updatablePanels.add(panel);
+	}
+
+	/**
+	 * sets one of the settings that are saved in config file
+	 * @param setting line from the config file, format: [key]=[value], e.g. "sort_by=name"
+	 */
+	private static void readConfig(String setting) {
+		var split = setting.split("=");
+		var key = split[0];
+		var value = split[1];
+		switch(key.toLowerCase().strip()) {
+			case("sort_by"): {
+				sortBy(value.toLowerCase().strip());
+				break;
+			}
+			case("reversed"): {
+				boolean rev;
+				try {
+					rev = Boolean.parseBoolean(value.toLowerCase().strip());
+				} catch(Exception e) {
+					throw new IllegalArgumentException("reversed must be a boolean value (true/false)");
+				}
+				if(rev) reverse();
+				break;
+			}
+			default: {
+				throw new IllegalArgumentException("unknown setting: " + key);
+			}
+		}
+	}
+
+	/**
+	 * This method sorts the accounts in the list by the given parameter
+	 * Possible values are: name, rank, custom
+	 * custom will leave the accounts in the order they were added (TODO: change oder also after adding the accounts)
+	 * @param order value the account list should be sorted by
+	 */
+	private static void sortBy(String order) {
+		if(order == null) throw new IllegalArgumentException("order must be not null");
+		switch(order) {
+			case("name"): {
+				accounts.sort(Comparator.comparing(Account::name));
+				break;
+			}
+			case("rank"): {
+				accounts.sort(Comparator.comparingInt(Account::getRR));
+				break;
+			}
+			case("custom"): {
+				break;
+			}
+			default: {
+				throw new IllegalArgumentException("unknown order parameter: " + order);
+			}
+		}
+		if(reversed)
+			Collections.reverse(accounts);
+	}
+
+	private static void reverse() {
+		Collections.reverse(accounts);
 	}
 }

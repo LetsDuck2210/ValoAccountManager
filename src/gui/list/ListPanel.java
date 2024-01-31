@@ -62,6 +62,14 @@ public class ListPanel extends JPanel {
 		refresh();
 	}
 
+	/**
+	 * Removes all accounts currently shown in the list
+	 */
+	public void removeAllAccounts() {
+		pane.removeAll();
+		refresh();
+	}
+
 	public void repaint() {
 		super.repaint();
 		if (paneLayout == null)

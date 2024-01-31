@@ -85,6 +85,16 @@ public record Account(String riotId, String password, String name, String taglin
 		}).start();
 	}
 
+
+	/* TODO: this could cause some problems: this method is mainly used to get the RR for sorting the accounts list.
+	 * TODO: Due to the fact, that the api needs some time to fetch the ranks, the sorting could mess up because the
+	 * TODO: value -1 will returned instead of the actual rank.
+	 */
+	public int getRR() {
+		if(rr.containsKey(this)) return rr.get(this);
+		return -1;
+	}
+
 	private String fetchAccountInfo(String name, String tagline) throws URISyntaxException, IOException, InterruptedException {
 		var nameR = name.replace(' ', '_');
 		var req = HttpRequest.newBuilder()
@@ -104,7 +114,7 @@ public record Account(String riotId, String password, String name, String taglin
 
 	public static Account fromString(String string) throws IllegalArgumentException {
 		var split = string.split(":");
-		Account acc = null;
+		Account acc;
 		try {
 			int riotIdLength = Integer.parseInt(split[0]);
 			String riotId = split[1].substring(0, riotIdLength);

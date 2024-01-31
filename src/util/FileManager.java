@@ -97,6 +97,8 @@ public class FileManager {
 		deleteLines(linesToBeDeleted);
 	}
 
+
+	/*
 	public void sort(Comparator<? super String> c) {
 		File tempFile = new File("temp.txt");
 		ArrayList<String> lines = readLines();
@@ -123,4 +125,5 @@ public class FileManager {
 			System.err.println("Could not delete original file.");
 		}
 	}
+ */
 }

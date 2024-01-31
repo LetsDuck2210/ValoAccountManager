@@ -4,6 +4,7 @@ import java.awt.Component;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 
@@ -72,6 +73,17 @@ public class HomeScreen extends JPanel {
 
 	public void removeAccountFromList(Account acc) {
 		listPanel.removeAccount(acc);
+	}
+
+	//TODO (not sure if this is needed)
+	/**
+	 * this method will clear the whole account list and add the accounts of the given list in the given order
+	 * @param accs new account list
+	 */
+	public void resetAccountList(List<Account> accs) {
+		listPanel.removeAllAccounts();
+		accs.forEach(this::addAccountToList);
+		refresh();
 	}
 
 	public void toggleExtended(JPanel panel) {
