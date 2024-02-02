@@ -14,13 +14,14 @@ import gui.GuiConstants;
 import gui.components.CrosshairButton;
 import gui.home.HomeScreen;
 import gui.panels.Updatable;
+import util.AccountsList;
 import util.FileManager;
 import valorant.Account;
 import valorant.EmptyAccount;
 
 public class ValoAccountManager extends JFrame {
 	private static final long serialVersionUID = -1983716182184486275L;
-	private static List<Account> accounts = new ArrayList<>();
+	private static AccountsList accounts = new AccountsList();
 	private static List<String> crosshairs = new ArrayList<>();
 	private static FileManager accountFileManager = new FileManager("accounts.txt");
 	private static FileManager crosshairFileManager = new FileManager("crosshairs.txt");
@@ -127,6 +128,17 @@ public class ValoAccountManager extends JFrame {
 
 	public static void addUpdateablePanel(Updatable panel) {
 		updatablePanels.add(panel);
+	}
+
+	//TODO!!!!!
+
+	public static void sortBy(String chosen) {
+		switch(chosen.strip().toLowerCase()) {
+			case "name": accounts.sortByName(); break;
+			case "rank": accounts.sortByRank(); break;
+			case "custom": accounts.sortCustom(); break;
+			default: throw new IllegalArgumentException("Selection [" + chosen + "] does not exist");
+		}
 	}
 
 	/**

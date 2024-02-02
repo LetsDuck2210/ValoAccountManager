@@ -7,6 +7,7 @@ import java.util.Collections;
 import java.util.Comparator;
 
 public class AccountsList extends ArrayList<Account> {
+    private AccountsList custom;
     public void sortByName() {
         this.sort(Comparator.comparing(Account::name));
     }
@@ -29,6 +30,13 @@ public class AccountsList extends ArrayList<Account> {
         if(!this.contains(account)) throw new IllegalArgumentException("account does not exist in list. Add it first.");
         this.remove(account);
         this.add(index, account);
+    }
+
+    /**
+     * Reverts the order of the list to the custom order
+     */
+    public void sortCustom() {
+
     }
 
     /**

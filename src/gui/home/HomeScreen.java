@@ -13,11 +13,7 @@ import javax.swing.JPanel;
 import gui.GuiConstants;
 import gui.info.InfoPanel;
 import gui.list.ListPanel;
-import gui.panels.AddAccountPanel;
-import gui.panels.CrosshairPanel;
-import gui.panels.DeleteAccountPanel;
-import gui.panels.EditAccountPanel;
-import gui.panels.Updatable;
+import gui.panels.*;
 import main.ValoAccountManager;
 import valorant.Account;
 
@@ -58,6 +54,7 @@ public class HomeScreen extends JPanel {
 		addExtendedPanel("edit", new EditAccountPanel());
 		addExtendedPanel("delete", new DeleteAccountPanel());
 		addExtendedPanel("crosshairs", crosshairPanel = new CrosshairPanel());
+		addExtendedPanel("sort", new SortByPanel());
 
 		showDefault();
 	}
