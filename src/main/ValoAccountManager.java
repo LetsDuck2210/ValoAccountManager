@@ -34,7 +34,6 @@ public class ValoAccountManager extends JFrame {
 	//TODO
 	/** configs */
 	private static FileManager configFileManager = new FileManager("config.txt");
-	private static boolean reversed = false; //list is sorted as chosen but reversed
 
 	public static void main(String[] args) throws IOException, UnsupportedLookAndFeelException {
 		accountFileManager.ensureExists();
@@ -130,15 +129,22 @@ public class ValoAccountManager extends JFrame {
 		updatablePanels.add(panel);
 	}
 
-	//TODO!!!!!
-
 	public static void sortBy(String chosen) {
 		switch(chosen.strip().toLowerCase()) {
 			case "name": accounts.sortByName(); break;
 			case "rank": accounts.sortByRank(); break;
-			case "custom": accounts.sortCustom(); break;
+			case "custom": accounts.revertSort(); break;
 			default: throw new IllegalArgumentException("Selection [" + chosen + "] does not exist");
 		}
+		home.resetAccountList(accounts);
+	}
+
+	/**
+	 * reverses the order of the accounts list
+	 */
+	public static void reverse() {
+		accounts.reverse();
+		home.resetAccountList(accounts);
 	}
 
 	/**

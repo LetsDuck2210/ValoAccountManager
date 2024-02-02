@@ -20,8 +20,10 @@ public record Account(String riotId, String password, String name, String taglin
 		Currency currency) {
 	private static Map<Account, Image> rankIcons = new HashMap<>();
 	public static Map<Account, Integer> rr = new HashMap<>();
+	public static Map<Account, Integer> absoluteRR = new HashMap<>();
 	private static Map<Account, Set<Optional<Consumer<Image>>>> fetching = new HashMap<>();
-	
+
+
 	public Account(String riotId, String pw, String name, String tagline, Currency currency) {
 		this(riotId, pw, name, tagline, "", currency);
 	}
@@ -40,7 +42,7 @@ public record Account(String riotId, String password, String name, String taglin
 		new Thread(() -> {
 			try {
 				System.out.println("fetching " + name + "#" + tagline);
-				var resp = fetchAccountInfo(name, tagline);
+				var resp = fetchAccountInfo();
 
 				var fromStrRR = "\"ranking_in_tier\":";
 				var fromIndRR = resp.indexOf(fromStrRR) + fromStrRR.length();
@@ -54,6 +56,20 @@ public record Account(String riotId, String password, String name, String taglin
 				} catch (NumberFormatException e) {
 					System.out.println("couldn't fetch RR: " + e.getMessage());
 					rr = -1;
+				}
+
+				var fromStrAbsoluteRR = "\"elo\":";
+				var fromIndAbsoluteRR = resp.indexOf(fromStrAbsoluteRR) + fromStrAbsoluteRR.length();
+				var absoluteRRStr = resp.substring(
+						fromIndAbsoluteRR,
+						resp.indexOf('"', fromIndAbsoluteRR + 1) - 1
+				);
+				int absoluteRR;
+				try {
+					absoluteRR = Integer.parseInt(absoluteRRStr);
+				} catch (NumberFormatException e) {
+					System.out.println("couldn't fetch absolute RR: " + e.getMessage());
+					absoluteRR = -1;
 				}
 
 				var fromStr = "\"currenttierpatched\":\"";
@@ -72,6 +88,7 @@ public record Account(String riotId, String password, String name, String taglin
 							.sync();
 
 				this.rr.put(this, rr);
+				this.absoluteRR.put(this, absoluteRR);
 				rankIcons.put(this, img);
 				for(var recv : fetching.get(this)) {
 					if(recv.isPresent())
@@ -90,12 +107,13 @@ public record Account(String riotId, String password, String name, String taglin
 	 * TODO: Due to the fact, that the api needs some time to fetch the ranks, the sorting could mess up because the
 	 * TODO: value -1 will returned instead of the actual rank.
 	 */
-	public int getRR() {
-		if(rr.containsKey(this)) return rr.get(this);
+	public int getAbsoluteRR() {
+		System.out.println(this.name + ": " + absoluteRR.get(this));
+		if(absoluteRR.containsKey(this)) return absoluteRR.get(this);
 		return -1;
 	}
 
-	private String fetchAccountInfo(String name, String tagline) throws URISyntaxException, IOException, InterruptedException {
+	private String fetchAccountInfo() throws URISyntaxException, IOException, InterruptedException {
 		var nameR = name.replace(' ', '_');
 		var req = HttpRequest.newBuilder()
 				.uri(new URI("https://api.henrikdev.xyz/valorant/v1/mmr/eu/" + nameR + "/" + tagline)).GET()
@@ -109,7 +127,6 @@ public record Account(String riotId, String password, String name, String taglin
 	public String toString() {
 		return riotId.length() + ":" + riotId + password.length() + ":" + password + name.length() + ":" + name
 				+ tagline.length() + ":" + tagline + additional.length() + ":" + additional + currency.toString();
-//		return STR."\{riotId.length()}: \{riotId}...";
 	}
 
 	public static Account fromString(String string) throws IllegalArgumentException {

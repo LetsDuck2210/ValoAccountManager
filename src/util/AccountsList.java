@@ -7,14 +7,44 @@ import java.util.Collections;
 import java.util.Comparator;
 
 public class AccountsList extends ArrayList<Account> {
-    private AccountsList custom;
+    private AccountsList customOrder;
+    private boolean custom = true;
+    public AccountsList() {
+        super();
+    }
+
+    public AccountsList(AccountsList list) {
+        super(list);
+        customOrder = list.customOrder;
+        custom = list.custom;
+    }
     public void sortByName() {
+        if(custom) {
+            customOrder = new AccountsList(this);
+            custom = false;
+        }
         this.sort(Comparator.comparing(Account::name));
     }
 
     // TODO: the getRR() method needs to be changed to return the absolute RR, not x/100 in current rank
     public void sortByRank() {
-        this.sort(Comparator.comparingInt(Account::getRR));
+        if(custom) {
+            customOrder = new AccountsList(this);
+            custom = false;
+        }
+        this.sort(Comparator.comparingInt(Account::getAbsoluteRR));
+        this.reverse();
+    }
+
+    /**
+     * Changes the order back to the custom order.
+     */
+    public void revertSort() {
+        if(!custom) {
+            this.removeAll(this);
+            this.addAll(customOrder);
+            custom = true;
+        }
     }
 
     /**
@@ -23,20 +53,13 @@ public class AccountsList extends ArrayList<Account> {
      * @param account account to move
      * @param index where to place the account, starting at 0
      */
-    public void sortManually(Account account, int index) {
+    public void move(Account account, int index) {
         if(index > this.size() - 1) throw new IndexOutOfBoundsException();
         if(account == null) throw new IllegalArgumentException("no account provided");
         // TODO: maybe need to change to look for equal accounts, not identical
         if(!this.contains(account)) throw new IllegalArgumentException("account does not exist in list. Add it first.");
         this.remove(account);
         this.add(index, account);
-    }
-
-    /**
-     * Reverts the order of the list to the custom order
-     */
-    public void sortCustom() {
-
     }
 
     /**

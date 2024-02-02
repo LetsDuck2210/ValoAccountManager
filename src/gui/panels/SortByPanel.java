@@ -54,6 +54,18 @@ public class SortByPanel extends JPanel {
                         new EmptyBorder(5, 5, 0, 5)));
                 add(radioButton);
             }
+
+            var reverse = new JButton("Reverse List");
+            reverse.setOpaque(true);
+            reverse.setBackground(GuiConstants.COMPONENT_COLOR);
+            reverse.setForeground(GuiConstants.TEXT_COLOR);
+            reverse.setBorder(BorderFactory.createCompoundBorder(new MatteBorder(5, 5, 0, 5, GuiConstants.BACKGROUND_COLOR),
+                    new EmptyBorder(5, 5, 0, 5)));
+            reverse.setFont(GuiConstants.FONT);
+            reverse.setSelected(false);
+            reverse.addActionListener(a -> ValoAccountManager.reverse());
+            add(reverse);
+
             var submit = new Button("submit", a -> {
                 System.out.println("changing oder to: " + chosen);
                 ValoAccountManager.sortBy(chosen);
