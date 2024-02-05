@@ -47,12 +47,11 @@ public class ValoAccountManager extends JFrame {
         crosshairs.addAll(crosshairFileManager.readLines());
 
 		UIManager.setLookAndFeel(new MetalLookAndFeel());
-		new ValoAccountManager();
+		new ValoAccountManager(); //if necessary, initially invisible, then turn visible after configs have been read
 
 		//TODO
-		//configFileManager.readLines().forEach(ValoAccountManager::readConfig);
+		configFileManager.readLines().forEach(ValoAccountManager::applyConfig);
 
-		accounts.forEach(home::addAccountToList);
 		crosshairs.forEach(home::addCrosshairToList);
 	}
 
@@ -129,6 +128,8 @@ public class ValoAccountManager extends JFrame {
 		updatablePanels.add(panel);
 	}
 
+
+	//TODO: change to enum
 	public static void sortBy(String chosen) {
 		switch(chosen.strip().toLowerCase()) {
 			case "name": accounts.sortByName(); break;
@@ -145,35 +146,67 @@ public class ValoAccountManager extends JFrame {
 	public static void reverse() {
 		accounts.reverse();
 		home.resetAccountList(accounts);
+
+		var rev = Boolean.parseBoolean(readConfig("reversed"));
+		updateConfig("reversed", "" + !rev);
 	}
 
 	/**
-	 * sets one of the settings that are saved in config file
+	 * Sets one of the settings that are saved in config file
 	 * @param setting line from the config file, format: [key]=[value], e.g. "sort_by=name"
 	 */
+	private static void applyConfig(String setting) {
+		var split = setting.split("=");
+		var key = split[0];
+		var value = split[1];
+		switch(key.toLowerCase().strip()) {
+			case("sort_by"): {
+				sortBy(value.toLowerCase().strip());
+				break;
+			}
+			case("reversed"): {
+				boolean rev;
+				try {
+					rev = Boolean.parseBoolean(value.toLowerCase().strip());
+				} catch(Exception e) {
+					throw new IllegalArgumentException("reversed must be a boolean value (true/false)");
+				}
+				if(rev) reverse();
+				break;
+			}
+			default: {
+				throw new IllegalArgumentException("unknown setting: " + key);
+			}
+		}
+	}
 
-//	private static void readConfig(String setting) {
-//		var split = setting.split("=");
-//		var key = split[0];
-//		var value = split[1];
-//		switch(key.toLowerCase().strip()) {
-//			case("sort_by"): {
-//				sortBy(value.toLowerCase().strip());
-//				break;
-//			}
-//			case("reversed"): {
-//				boolean rev;
-//				try {
-//					rev = Boolean.parseBoolean(value.toLowerCase().strip());
-//				} catch(Exception e) {
-//					throw new IllegalArgumentException("reversed must be a boolean value (true/false)");
-//				}
-//				if(rev) reverse();
-//				break;
-//			}
-//			default: {
-//				throw new IllegalArgumentException("unknown setting: " + key);
-//			}
-//		}
-//	}
+	/**
+	 * returns the value of the given setting
+	 * @param setting requested setting
+	 * @return value of the given setting
+	 */
+	private static String readConfig(String setting) {
+		final String[] result = new String[1];
+		configFileManager.readLines().forEach(a -> {
+			var line = a.split("=");
+			if(line[0].equals(setting)) {
+				result[0] = line[1];
+			}
+		});
+		if(result[0] == null) throw new IllegalArgumentException();
+		return result[0];
+	}
+
+	/**
+	 * Sets the given setting to the given value
+	 * @param setting setting to be changed
+	 * @param value value of the setting
+	 */
+	private static void updateConfig(String setting, String value) {
+		if (setting == null || value == null || setting.isEmpty() || value.isEmpty())
+			throw new IllegalArgumentException("invalid setting");
+		var setting_code = setting.strip().toLowerCase().replace(" ", "_");
+		var value_code = value.strip().toLowerCase().replace(" ", "_");
+		configFileManager.deleteLine(setting_code + "=" + value_code);
+	}
 }

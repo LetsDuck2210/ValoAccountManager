@@ -108,7 +108,6 @@ public record Account(String riotId, String password, String name, String taglin
 	 * TODO: value -1 will returned instead of the actual rank.
 	 */
 	public int getAbsoluteRR() {
-		System.out.println(this.name + ": " + absoluteRR.get(this));
 		if(absoluteRR.containsKey(this)) return absoluteRR.get(this);
 		return -1;
 	}

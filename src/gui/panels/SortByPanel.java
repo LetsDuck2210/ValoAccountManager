@@ -2,6 +2,7 @@ package gui.panels;
 
 import gui.GuiConstants;
 import gui.components.Button;
+import gui.components.EmptyComponent;
 import gui.components.Headline;
 import main.ValoAccountManager;
 
@@ -14,7 +15,6 @@ import java.util.Arrays;
 
 public class SortByPanel extends JPanel {
     private static final String[] options = new String[]{"Custom", "Name", "Rank"};
-    private String chosen = options[0];
     public SortByPanel() {
         super();
         var layout = new GridBagLayout();
@@ -38,44 +38,17 @@ public class SortByPanel extends JPanel {
             setOpaque(true);
             setBackground(GuiConstants.BACKGROUND_COLOR);
             setLayout(new GridLayout(8, 1));
-            //setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
 
-            var group = new ButtonGroup();
             for(String option : options) {
-                var radioButton = new JRadioButton(option);
-                group.add(radioButton);
-                radioButton.addActionListener(a -> {
-                    setSort(option);
-                });
-                radioButton.setOpaque(true);
-                radioButton.setBackground(GuiConstants.COMPONENT_COLOR);
-                radioButton.setForeground(GuiConstants.TEXT_COLOR);
-                radioButton.setBorder(BorderFactory.createCompoundBorder(new MatteBorder(5, 5, 0, 5, GuiConstants.BACKGROUND_COLOR),
-                        new EmptyBorder(5, 5, 0, 5)));
-                add(radioButton);
+                var button = new Button(option, a -> ValoAccountManager.sortBy(option));
+                add(button);
             }
 
-            var reverse = new JButton("Reverse List");
-            reverse.setOpaque(true);
-            reverse.setBackground(GuiConstants.COMPONENT_COLOR);
-            reverse.setForeground(GuiConstants.TEXT_COLOR);
-            reverse.setBorder(BorderFactory.createCompoundBorder(new MatteBorder(5, 5, 0, 5, GuiConstants.BACKGROUND_COLOR),
-                    new EmptyBorder(5, 5, 0, 5)));
-            reverse.setFont(GuiConstants.FONT);
-            reverse.setSelected(false);
-            reverse.addActionListener(a -> ValoAccountManager.reverse());
+            for(int i = 0; i < 7 - options.length; i++)
+                add(new EmptyComponent());
+
+            var reverse = new Button("Reverse", a -> ValoAccountManager.reverse());
             add(reverse);
-
-            var submit = new Button("submit", a -> {
-                System.out.println("changing oder to: " + chosen);
-                ValoAccountManager.sortBy(chosen);
-            });
-            add(submit);
-        }
-
-        private void setSort(String option) {
-            if(option == null || Arrays.stream(options).noneMatch(option::equals)) throw new IllegalArgumentException();
-            chosen = option;
         }
     }
 }
