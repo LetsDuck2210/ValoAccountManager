@@ -14,6 +14,7 @@ import java.util.Set;
 import java.util.function.Consumer;
 import java.util.Optional;
 
+import main.ValoAccountManager;
 import util.ImageUtil;
 
 public record Account(String riotId, String password, String name, String tagline, String additional,
@@ -90,6 +91,9 @@ public record Account(String riotId, String password, String name, String taglin
 				this.rr.put(this, rr);
 				this.absoluteRR.put(this, absoluteRR);
 				rankIcons.put(this, img);
+
+				ValoAccountManager.updateSortByRank();
+
 				for(var recv : fetching.get(this)) {
 					if(recv.isPresent())
 						recv.get().accept(img);

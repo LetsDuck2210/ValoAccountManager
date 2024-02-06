@@ -33,7 +33,7 @@ public class AccountsList extends ArrayList<Account> {
             custom = false;
         }
         this.sort(Comparator.comparingInt(Account::getAbsoluteRR));
-        this.reverse();
+        reverse();
     }
 
     /**

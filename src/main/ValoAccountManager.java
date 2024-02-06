@@ -31,6 +31,14 @@ public class ValoAccountManager extends JFrame {
 	private static HomeScreen home = new HomeScreen();
 
 
+	//TODO: fix problems with rank fetching and sorting the list
+	// currently when a rank has been fetched, the accounts list is sorted. Because the sorting manipulates the list,
+	// there is a time period, in which we have a critical section. Could be fixed by
+	// - waiting for all ranks to be fetched before sorting and showing the accounts
+	// - showing the custom list before all accounts have been fetched
+	// - favorite: initially put the accounts in custom order, then, with every fetched rank, put the account to its
+	//		right position relatively to the other, already fetched, accounts.
+
 	//TODO
 	/** configs */
 	private static FileManager configFileManager = new FileManager("config.txt");
@@ -49,7 +57,6 @@ public class ValoAccountManager extends JFrame {
 		UIManager.setLookAndFeel(new MetalLookAndFeel());
 		new ValoAccountManager(); //if necessary, initially invisible, then turn visible after configs have been read
 
-		//TODO
 		configFileManager.readLines().forEach(ValoAccountManager::applyConfig);
 
 		crosshairs.forEach(home::addCrosshairToList);
@@ -128,8 +135,6 @@ public class ValoAccountManager extends JFrame {
 		updatablePanels.add(panel);
 	}
 
-
-	//TODO: change to enum
 	public static void sortBy(String chosen) {
 		switch(chosen.strip().toLowerCase()) {
 			case "name": accounts.sortByName(); break;
@@ -138,6 +143,20 @@ public class ValoAccountManager extends JFrame {
 			default: throw new IllegalArgumentException("Selection [" + chosen + "] does not exist");
 		}
 		home.resetAccountList(accounts);
+
+		updateConfig("sort_by", chosen);
+	}
+
+	/**
+	 * When this method is called and the list is currently sorted by rank, the ranks will be checked again and the list
+	 * will, if needed, be sorted again.
+	 * We call this function everytime the rank of an account has been fetched to ensure eventually displaying the right
+	 * order while still asynchronously fetching the ranks.
+	 */
+	public static void updateSortByRank() {
+		if(readConfig("sort_by").equals("rank")) {
+			sortBy("rank");
+		}
 	}
 
 	/**
@@ -152,7 +171,16 @@ public class ValoAccountManager extends JFrame {
 	}
 
 	/**
-	 * Sets one of the settings that are saved in config file
+	 * This method should only be used internally, when the config file is initially read after starting the program.
+	 * It does not update the config file but reverses the accounts list.
+	 */
+	private static void reverseWithoutConfig() {
+		accounts.reverse();
+		home.resetAccountList(accounts);
+	}
+
+	/**
+	 * Applies one of the settings that are saved in config file
 	 * @param setting line from the config file, format: [key]=[value], e.g. "sort_by=name"
 	 */
 	private static void applyConfig(String setting) {
@@ -171,7 +199,7 @@ public class ValoAccountManager extends JFrame {
 				} catch(Exception e) {
 					throw new IllegalArgumentException("reversed must be a boolean value (true/false)");
 				}
-				if(rev) reverse();
+				if(rev) reverseWithoutConfig();
 				break;
 			}
 			default: {
@@ -198,7 +226,7 @@ public class ValoAccountManager extends JFrame {
 	}
 
 	/**
-	 * Sets the given setting to the given value
+	 * Sets the given setting to the given value in the config file
 	 * @param setting setting to be changed
 	 * @param value value of the setting
 	 */
@@ -207,6 +235,11 @@ public class ValoAccountManager extends JFrame {
 			throw new IllegalArgumentException("invalid setting");
 		var setting_code = setting.strip().toLowerCase().replace(" ", "_");
 		var value_code = value.strip().toLowerCase().replace(" ", "_");
-		configFileManager.deleteLine(setting_code + "=" + value_code);
+		for(String line : configFileManager.readLines()) {
+			if(line.startsWith(setting_code)) {
+				configFileManager.deleteLine(line);
+			}
+		}
+		configFileManager.writeLine(setting_code + "=" + value_code);
 	}
 }
