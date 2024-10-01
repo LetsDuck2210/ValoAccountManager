@@ -2,7 +2,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>ValoAccountManager</groupId>
 	<artifactId>ValoAccountManager</artifactId>
-	<version>0.0.1-SNAPSHOT</version>
+	<version>0.0.2</version>
 	<build>
 		<sourceDirectory>src</sourceDirectory>
 		<plugins>
