@@ -1,6 +1,6 @@
 package gui.info;
 
-import java.awt.GridLayout;
+import java.awt.*;
 
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
@@ -13,15 +13,37 @@ public class InfoPanel extends JPanel {
 	private RankPanel rankPanel;
 
 	public InfoPanel() {
-		var layout = new GridLayout(6, 1);
+		var layout = new GridBagLayout();
+		var c = new GridBagConstraints();
+
 		setLayout(layout);
 		setBorder(new EmptyBorder(0, 0, 10, 0));
 		setBackground(GuiConstants.BACKGROUND_COLOR);
 		setOpaque(true);
 
-		for (var display : InfoDisplay.values())
-			add(display.getButton());
-		add(rankPanel = new RankPanel());
+		c.fill = GridBagConstraints.BOTH;
+		c.weightx = 1;
+		c.weighty = 1;
+		c.anchor = GridBagConstraints.FIRST_LINE_START;
+
+		c.gridwidth = 2;
+		c.gridheight = 1;
+		c.gridx = 0;
+		c.gridy = 0;
+		add(InfoDisplay.NAME.getButton(), c);
+		c.gridwidth = 1;
+		c.gridy = 1;
+		add(InfoDisplay.RIOTID.getButton(), c);
+		c.gridx = 1;
+		add(InfoDisplay.PASSWORD.getButton(), c);
+		c.gridwidth = 2;
+		c.gridx = 0;
+		c.gridy = 2;
+		add(InfoDisplay.CURRENCY.getButton(), c);
+		c.gridy = 3;
+		add(InfoDisplay.ADDITIONAL.getButton(), c);
+		c.gridy = 4;
+		add(rankPanel = new RankPanel(), c);
 	}
 
 	public void display(Account account) {

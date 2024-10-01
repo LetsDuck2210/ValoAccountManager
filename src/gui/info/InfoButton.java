@@ -13,12 +13,11 @@ import gui.GuiConstants;
 
 class InfoButton extends JButton {
 	private static final long serialVersionUID = 6880347885377211418L;
-	protected String text, value;
+	protected String value;
 
-	public InfoButton(String text, String value, boolean enabled) {
-		super(text + value);
+	public InfoButton(String value, boolean enabled) {
+		super(value);
 
-		this.text = text;
 		this.value = value;
 
 		setEnabled(enabled);
@@ -41,6 +40,5 @@ class InfoButton extends JButton {
 
 	public void setValue(String value) {
 		this.value = value;
-		setText(text + value);
 	}
 }
