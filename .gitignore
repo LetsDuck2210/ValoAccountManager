@@ -25,3 +25,8 @@ replay_pid*
 /bin/
 /target/
 .DS_STORE
+
+.settings/
+.project
+dependency-reduced-pom.xml
+

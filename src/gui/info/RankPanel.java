@@ -44,7 +44,7 @@ public class RankPanel extends JPanel {
 		constr.gridheight = constr.gridwidth = 1;
 		
 		setLayout(layout);
-		text = new JLabel("Rank: ");
+		text = new JLabel("Level: ");
 		text.setFont(GuiConstants.FONT);
 		text.setForeground(Color.GRAY);
 		add(text, constr);
@@ -89,7 +89,7 @@ public class RankPanel extends JPanel {
 				return;
 			rankImage = i;
 			var rr = Account.rr.get(acc);
-			text.setText("Rank: " + (rr == null ? -1 : rr) + "/100 ");
+			text.setText("Level: " + (rr == null ? -1 : rr));
 			repaint();
 			revalidate();
 		});

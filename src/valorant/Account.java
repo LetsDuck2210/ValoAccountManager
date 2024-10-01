@@ -12,9 +12,14 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 import java.util.function.Consumer;
+
+import org.jsoup.Jsoup;
+
 import java.util.Optional;
 
+import util.FileManager;
 import util.ImageUtil;
+import util.Tuple;
 
 public record Account(String riotId, String password, String name, String tagline, String additional,
 		Currency currency) {
@@ -41,37 +46,19 @@ public record Account(String riotId, String password, String name, String taglin
 			try {
 				System.out.println("fetching " + name + "#" + tagline);
 				var resp = fetchAccountInfo(name, tagline);
+				String rankName = resp.first();
+				int rr = resp.second();
 
-				var fromStrRR = "\"ranking_in_tier\":";
-				var fromIndRR = resp.indexOf(fromStrRR) + fromStrRR.length();
-				var rrStr = resp.substring(
-						fromIndRR,
-						resp.indexOf('"', fromIndRR + 1) - 1
-				);
-				int rr;
-				try {
-					rr = Integer.parseInt(rrStr);
-				} catch (NumberFormatException e) {
-					System.out.println("couldn't fetch RR: " + e.getMessage());
-					rr = -1;
-				}
-
-				var fromStr = "\"currenttierpatched\":\"";
-				var fromInd = resp.indexOf(fromStr) + fromStr.length();
-				var rank = resp.substring(
-					fromInd,
-					resp.indexOf('"', fromInd + 1)
-				);
-				var img = ImageUtil.loadFile("assets/rankIcons/" + rank.replaceAll("\s", "_") + ".png")
-							.catchErr(e -> {})
-							.sync();
-				System.out.println(name + "#" + tagline + " fetched!");
+				System.out.println(name + "#" + tagline + " fetched: " + rankName);
+				var img = ImageUtil.loadFile("assets/rankIcons/" + rankName.replaceAll("\\s", "_") + ".png")
+						.catchErr(e -> e.printStackTrace())
+						.sync();
 				if(img == null)
 					img = ImageUtil.loadFile("assets/rankIcons/empty.png")
 							.catchErr(e -> {})
 							.sync();
 
-				this.rr.put(this, rr);
+				Account.rr.put(this, rr);
 				rankIcons.put(this, img);
 				for(var recv : fetching.get(this)) {
 					if(recv.isPresent())
@@ -95,14 +82,36 @@ public record Account(String riotId, String password, String name, String taglin
 		return -1;
 	}
 
-	private String fetchAccountInfo(String name, String tagline) throws URISyntaxException, IOException, InterruptedException {
-		var nameR = name.replace(' ', '_');
-		var req = HttpRequest.newBuilder()
-				.uri(new URI("https://api.henrikdev.xyz/valorant/v1/mmr/eu/" + nameR + "/" + tagline)).GET()
-				.build();
+	private Tuple<String, Integer> fetchAccountInfo(String name, String tagline) throws URISyntaxException, IOException, InterruptedException {
+		if(name.isBlank() || tagline.isBlank())
+			return Tuple.of("Unranked", -1);
 
-		var client = HttpClient.newHttpClient();
-		return client.send(req, BodyHandlers.ofString()).body();
+		var nameR = name.replace(" ", "%20");
+		var doc = Jsoup.connect("https://tracker.gg/valorant/profile/riot/" + nameR + "%23" + tagline)
+			.userAgent("Mozilla/5.0 (Windows NT x.y; Win64; x64; rv:10.0) Gecko/20100101 Firefox/10.0")
+			.followRedirects(true)
+			.headers(Map.of(
+				"Accept", "text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/png,image/svg+xml,*/*;q=0.8",
+				"Accept-Language", "en-US,en;q=0.5",
+				"Connection", "keep-alive",
+				"DNT", "1",
+				"Priority", "u=0, i"
+			))
+			.get();
+		var ranks = doc.select("span.stat__value");
+		String rankStr = (ranks.size() > 0 ? 
+				ranks.getFirst().text().trim() 
+				: "Unranked");
+		int level = -1;
+		try {
+			level = (ranks.size() > 1 ?
+					Integer.parseInt(ranks.get(1).text().trim())
+					: -1);
+		} catch(NumberFormatException e) {
+			System.out.println("Failed to parse level to int: " + ranks.get(1).text().trim());
+		}
+
+		return Tuple.of(rankStr, level);
 	}
 
 	@Override
